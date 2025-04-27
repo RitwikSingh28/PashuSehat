@@ -1,157 +1,104 @@
 import 'package:flutter/material.dart';
-import 'package:cattle_health/core/theme/app_colors.dart';
-import 'package:cattle_health/core/theme/app_typography.dart';
 
-/// Theme configuration for PashuSehat app
 class AppTheme {
-  // Private constructor to prevent instantiation
-  AppTheme._();
+  static const _primaryColor = Color(0xFF2E7D32); // Forest Green
+  static const _primaryColorLight = Color(0xFF60AD5E); // Lighter shade
+  static const _primaryColorDark = Color(0xFF005005); // Darker shade
 
-  /// Light theme configuration
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
-      brightness: Brightness.light,
-      colorScheme: ColorScheme(
-        brightness: Brightness.light,
-        primary: AppColors.primary,
-        onPrimary: AppColors.textOnPrimary,
-        primaryContainer: AppColors.primaryLight,
-        onPrimaryContainer: AppColors.textPrimary,
-        secondary: AppColors.secondary,
-        onSecondary: AppColors.textOnSecondary,
-        secondaryContainer: AppColors.secondaryLight,
-        onSecondaryContainer: AppColors.textPrimary,
-        tertiary: AppColors.accent,
-        onTertiary: AppColors.textOnPrimary,
-        tertiaryContainer: AppColors.hay,
-        onTertiaryContainer: AppColors.textPrimary,
-        error: AppColors.error,
-        onError: AppColors.textOnPrimary,
-        errorContainer: AppColors.error.withOpacity(0.8),
-        onErrorContainer: AppColors.textOnPrimary,
-        background: AppColors.background,
-        onBackground: AppColors.textPrimary,
-        surface: AppColors.surface,
-        onSurface: AppColors.textPrimary,
-        surfaceVariant: AppColors.background,
-        onSurfaceVariant: AppColors.textSecondary,
-        outline: AppColors.divider,
+      colorScheme: ColorScheme.light(
+        primary: _primaryColor,
+        secondary: _primaryColorLight,
+        onPrimary: Colors.white,
+        onSecondary: Colors.white,
       ),
-      textTheme: AppTypography.textTheme,
-
-      // Component themes
-      appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.textOnPrimary,
-        elevation: 0,
+      appBarTheme: const AppBarTheme(
+        backgroundColor: _primaryColor,
+        foregroundColor: Colors.white,
       ),
-
-      cardTheme: CardTheme(
-        color: AppColors.surface,
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        selectedItemColor: _primaryColor,
+        unselectedItemColor: Colors.grey,
       ),
-
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.textOnPrimary,
-          minimumSize: const Size(88, 48),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+      segmentedButtonTheme: SegmentedButtonThemeData(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.resolveWith<Color>(
+            (Set<MaterialState> states) {
+              if (states.contains(MaterialState.selected)) {
+                return _primaryColor;
+              }
+              return Colors.grey.shade200;
+            },
+          ),
+          foregroundColor: MaterialStateProperty.resolveWith<Color>(
+            (Set<MaterialState> states) {
+              if (states.contains(MaterialState.selected)) {
+                return Colors.white;
+              }
+              return Colors.grey.shade700;
+            },
           ),
         ),
       ),
-
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.textOnPrimary,
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: _primaryColor,
+        foregroundColor: Colors.white,
       ),
-
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: AppColors.surface,
-        selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.textSecondary,
+      tabBarTheme: const TabBarTheme(
+        labelColor: Colors.white,
+        unselectedLabelColor: Colors.white70,
+        indicatorColor: Colors.white,
       ),
     );
   }
 
-  /// Dark theme configuration
   static ThemeData get darkTheme {
     return ThemeData(
       useMaterial3: true,
-      brightness: Brightness.dark,
-      colorScheme: ColorScheme(
-        brightness: Brightness.dark,
-        primary: AppColors.primaryLight,
-        onPrimary: AppColors.darkBackground,
-        primaryContainer: AppColors.primary,
-        onPrimaryContainer: AppColors.textOnPrimary,
-        secondary: AppColors.secondaryLight,
-        onSecondary: AppColors.darkBackground,
-        secondaryContainer: AppColors.secondary,
-        onSecondaryContainer: AppColors.textOnPrimary,
-        tertiary: AppColors.accent,
-        onTertiary: AppColors.darkBackground,
-        tertiaryContainer: AppColors.hay.withOpacity(0.7),
-        onTertiaryContainer: AppColors.textOnPrimary,
-        error: AppColors.darkError,
-        onError: AppColors.darkBackground,
-        errorContainer: AppColors.error.withOpacity(0.8),
-        onErrorContainer: AppColors.textOnPrimary,
-        background: AppColors.darkBackground,
-        onBackground: AppColors.textOnPrimary,
-        surface: AppColors.darkSurface,
-        onSurface: AppColors.textOnPrimary,
-        surfaceVariant: AppColors.darkBackground,
-        onSurfaceVariant: AppColors.textSecondary,
-        outline: AppColors.divider.withOpacity(0.3),
+      colorScheme: ColorScheme.dark(
+        primary: _primaryColorLight,
+        secondary: _primaryColor,
+        onPrimary: Colors.white,
+        onSecondary: Colors.white,
       ),
-      textTheme: AppTypography.textTheme.apply(
-        bodyColor: AppColors.textOnPrimary,
-        displayColor: AppColors.textOnPrimary,
-      ),
-
-      // Component themes
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.darkSurface,
-        foregroundColor: AppColors.textOnPrimary,
-        elevation: 0,
+        backgroundColor: _primaryColorDark,
+        foregroundColor: Colors.white,
       ),
-
-      cardTheme: CardTheme(
-        color: AppColors.darkSurface,
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        selectedItemColor: _primaryColorLight,
+        unselectedItemColor: Colors.grey.shade400,
       ),
-
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.textOnPrimary,
-          minimumSize: const Size(88, 48),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+      segmentedButtonTheme: SegmentedButtonThemeData(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.resolveWith<Color>(
+            (Set<MaterialState> states) {
+              if (states.contains(MaterialState.selected)) {
+                return _primaryColorLight;
+              }
+              return Colors.grey.shade800;
+            },
+          ),
+          foregroundColor: MaterialStateProperty.resolveWith<Color>(
+            (Set<MaterialState> states) {
+              if (states.contains(MaterialState.selected)) {
+                return Colors.white;
+              }
+              return Colors.grey.shade300;
+            },
           ),
         ),
       ),
-
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.textOnPrimary,
+        backgroundColor: _primaryColorLight,
+        foregroundColor: Colors.white,
       ),
-
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: AppColors.darkSurface,
-        selectedItemColor: AppColors.primaryLight,
-        unselectedItemColor: AppColors.textSecondary,
+      tabBarTheme: TabBarTheme(
+        labelColor: Colors.white,
+        unselectedLabelColor: Colors.grey.shade400,
+        indicatorColor: _primaryColorLight,
       ),
     );
   }

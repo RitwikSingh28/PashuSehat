@@ -172,6 +172,8 @@ class _CattleDetailsScreenState extends State<CattleDetailsScreen> {
                             },
                           ),
                         ),
+                      ],
+                    ),
                   ),
                 ),
                 MetricsChart(
