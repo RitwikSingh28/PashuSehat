@@ -85,6 +85,10 @@ class AppRouter {
             builder: (context, state) => const CattleListScreen(),
             routes: [
               GoRoute(
+                path: 'add',
+                builder: (context, state) => const AddCattleScreen(),
+              ),
+              GoRoute(
                 path: ':id',
                 builder: (context, state) {
                   final id = state.pathParameters['id']!;
@@ -102,25 +106,19 @@ class AppRouter {
             ],
           ),
 
-          // Profile (moved inside shell route)
+          // Profile
           GoRoute(
             path: RouteNames.profile,
             builder: (context, state) => const ProfileScreen(),
           ),
 
-          // Add Cattle (moved inside shell route)
-          GoRoute(
-            path: RouteNames.addCattle,
-            builder: (context, state) => const AddCattleScreen(),
-          ),
-
-          // Add Collar Tag (moved inside shell route)
+          // Add Collar Tag
           GoRoute(
             path: RouteNames.addCollarTag,
             builder: (context, state) => const AddCollarScreen(),
           ),
 
-          // Contact Us (moved inside shell route)
+          // Contact Us
           GoRoute(
             path: RouteNames.contactUs,
             builder: (context, state) => const ContactScreen(),

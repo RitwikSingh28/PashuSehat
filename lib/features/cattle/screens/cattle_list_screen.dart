@@ -68,11 +68,12 @@ class CattleListScreen extends StatelessWidget {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          context.go(RouteNames.addCattle);
+          context.go('/cattle/add');
         },
-        child: const Icon(Icons.add),
+        label: const Text('Add Cattle'),
+        icon: const Icon(Icons.add),
       ),
     );
   }
