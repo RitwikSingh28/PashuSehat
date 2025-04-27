@@ -67,11 +67,6 @@ class AppRouter {
         path: RouteNames.forgotPassword,
         builder: (context, state) => const ForgotPasswordScreen(),
       ),
-      GoRoute(
-        path: RouteNames.addCollarTag,
-        builder: (context, state) => const AddCollarScreen(),
-      ),
-
       // Shell route (contains bottom navigation and drawer)
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
@@ -142,6 +137,12 @@ class AppRouter {
                 ],
               ),
             ],
+          ),
+
+          // Add Collar Tag
+          GoRoute(
+            path: RouteNames.addCollarTag,
+            builder: (context, state) => const AddCollarScreen(),
           ),
 
           // Profile
