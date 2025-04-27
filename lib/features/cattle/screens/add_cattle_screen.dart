@@ -19,7 +19,45 @@ class _AddCattleScreenState extends State<AddCattleScreen> {
   final _nameController = TextEditingController();
   DateTime? _dateOfBirth;
   AgeGroup _selectedAgeGroup = AgeGroup.adult;
-  final _varietyController = TextEditingController();
+  String? _selectedVariety;
+
+  // List of Indian cattle breeds
+  final List<String> _cattleBreeds = [
+    'Gir',
+    'Sahiwal',
+    'Red Sindhi',
+    'Tharparkar',
+    'Rathi',
+    'Kankrej',
+    'Ongole',
+    'Deoni',
+    'Hariana',
+    'Khillari',
+    'Kangayam',
+    'Amritmahal',
+    'Hallikar',
+    'Vechur',
+    'Punganur',
+    'Krishna Valley',
+    'Nagori',
+    'Malvi',
+    'Nimari',
+    'Dangi',
+    'Gaolao',
+    'Red Kandhari',
+    'Bargur',
+    'Umblachery',
+    'Alambadi',
+    'Bachaur',
+    'Gangatiri',
+    'Mewati',
+    'Ponwar',
+    'Kosali',
+    'Belahi',
+    'Ladakhi',
+    'Siri',
+    'Lakhimi'
+  ]..sort(); // Sort alphabetically
 
   // Second form fields
   final _collarTagController = TextEditingController();
@@ -37,7 +75,6 @@ class _AddCattleScreenState extends State<AddCattleScreen> {
   @override
   void dispose() {
     _nameController.dispose();
-    _varietyController.dispose();
     _collarTagController.dispose();
     _govtIdController.dispose();
     _fatherIdController.dispose();
@@ -47,6 +84,12 @@ class _AddCattleScreenState extends State<AddCattleScreen> {
 
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
+      if (_selectedVariety == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please select a cattle breed')),
+        );
+        return;
+      }
       // TODO: Implement actual form submission
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Cattle added successfully')),
@@ -66,7 +109,14 @@ class _AddCattleScreenState extends State<AddCattleScreen> {
         child: Stepper(
           currentStep: _currentStep,
           onStepContinue: () {
-            if (_currentStep < 1) {
+            final isLastStep = _currentStep == 1;
+            if (!isLastStep) {
+              if (_selectedVariety == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Please select a cattle breed')),
+                );
+                return;
+              }
               setState(() {
                 _currentStep++;
               });
@@ -105,8 +155,8 @@ class _AddCattleScreenState extends State<AddCattleScreen> {
                   ListTile(
                     title: const Text('Date of Birth *'),
                     subtitle: Text(_dateOfBirth != null
-                      ? '${_dateOfBirth!.day}/${_dateOfBirth!.month}/${_dateOfBirth!.year}'
-                      : 'Select date'),
+                        ? '${_dateOfBirth!.day}/${_dateOfBirth!.month}/${_dateOfBirth!.year}'
+                        : 'Select date'),
                     trailing: const Icon(Icons.calendar_today),
                     onTap: () async {
                       final date = await showDatePicker(
@@ -143,19 +193,81 @@ class _AddCattleScreenState extends State<AddCattleScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _varietyController,
-                    decoration: const InputDecoration(
-                      labelText: 'Variety *',
-                      hintText: 'Enter cattle variety',
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter the variety';
+                  Autocomplete<String>(
+                    optionsBuilder: (TextEditingValue textEditingValue) {
+                      if (textEditingValue.text.isEmpty) {
+                        return _cattleBreeds;
                       }
-                      return null;
+                      return _cattleBreeds.where((breed) => breed.toLowerCase()
+                          .contains(textEditingValue.text.toLowerCase()));
+                    },
+                    onSelected: (String selection) {
+                      setState(() {
+                        _selectedVariety = selection;
+                      });
+                    },
+                    fieldViewBuilder: (BuildContext context,
+                        TextEditingController textEditingController,
+                        FocusNode focusNode,
+                        VoidCallback onFieldSubmitted) {
+                      return TextFormField(
+                        controller: textEditingController,
+                        focusNode: focusNode,
+                        decoration: InputDecoration(
+                          labelText: 'Breed *',
+                          hintText: 'Search or select cattle breed',
+                          suffixIcon: _selectedVariety != null
+                              ? IconButton(
+                                  icon: const Icon(Icons.clear),
+                                  onPressed: () {
+                                    textEditingController.clear();
+                                    setState(() {
+                                      _selectedVariety = null;
+                                    });
+                                  },
+                                )
+                              : null,
+                        ),
+                      );
+                    },
+                    optionsViewBuilder: (BuildContext context,
+                        AutocompleteOnSelected<String> onSelected,
+                        Iterable<String> options) {
+                      return Align(
+                        alignment: Alignment.topLeft,
+                        child: Material(
+                          elevation: 4.0,
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxHeight: 200),
+                            child: ListView.builder(
+                              padding: EdgeInsets.zero,
+                              shrinkWrap: true,
+                              itemCount: options.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final String option = options.elementAt(index);
+                                return ListTile(
+                                  title: Text(option),
+                                  onTap: () {
+                                    onSelected(option);
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      );
                     },
                   ),
+                  if (_selectedVariety != null) ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      'Selected breed: $_selectedVariety',
+                      style: const TextStyle(
+                        color: Colors.green,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ],
               ),
               isActive: _currentStep >= 0,
@@ -165,7 +277,9 @@ class _AddCattleScreenState extends State<AddCattleScreen> {
               content: Column(
                 children: [
                   DropdownButtonFormField<String>(
-                    value: _collarTagController.text.isEmpty ? null : _collarTagController.text,
+                    value: _collarTagController.text.isEmpty
+                        ? null
+                        : _collarTagController.text,
                     decoration: const InputDecoration(
                       labelText: 'Collar Tag *',
                     ),
@@ -206,7 +320,7 @@ class _AddCattleScreenState extends State<AddCattleScreen> {
                     controller: _fatherIdController,
                     decoration: const InputDecoration(
                       labelText: 'Father ID (Optional)',
-                      hintText: 'Enter father\'s ID if known',
+                      hintText: "Enter father's ID if known",
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -214,7 +328,7 @@ class _AddCattleScreenState extends State<AddCattleScreen> {
                     controller: _motherIdController,
                     decoration: const InputDecoration(
                       labelText: 'Mother ID (Optional)',
-                      hintText: 'Enter mother\'s ID if known',
+                      hintText: "Enter mother's ID if known",
                     ),
                   ),
                 ],

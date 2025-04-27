@@ -112,11 +112,6 @@ class AppRouter {
             builder: (context, state) => const ProfileScreen(),
           ),
 
-          // Add Collar Tag
-          GoRoute(
-            path: RouteNames.addCollarTag,
-            builder: (context, state) => const AddCollarScreen(),
-          ),
 
           // Contact Us
           GoRoute(
