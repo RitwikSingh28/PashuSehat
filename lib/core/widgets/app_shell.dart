@@ -163,8 +163,9 @@ class AppShell extends StatelessWidget {
             FilledButton(
               onPressed: () {
                 context.pop(); // Close dialog
-                // TODO: Implement logout logic
-                // context.go(RouteNames.login);
+                // Clear navigation stack and go to login
+                // Using go instead of pushReplacement to clear the stack
+                context.go(RouteNames.login);
               },
               child: const Text('Logout'),
             ),

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cattle_health/core/widgets/app_shell.dart';
+import 'package:cattle_health/features/auth/screens/login_screen.dart';
+import 'package:cattle_health/features/auth/screens/signup_screen.dart';
+import 'package:cattle_health/features/auth/screens/forgot_password_screen.dart';
 import 'package:cattle_health/features/splash/screens/splash_screen.dart';
 import 'package:cattle_health/features/onboarding/screens/onboarding_screen.dart';
 import 'package:cattle_health/features/dashboard/screens/dashboard_screen.dart';
@@ -23,6 +26,25 @@ class AppRouter {
   static final GoRouter router = GoRouter(
     navigatorKey: _rootNavigatorKey,
     initialLocation: RouteNames.splash,
+    // TODO: For production, implement proper auth redirect logic:
+    // 1. Add auth state management (e.g., using Provider or Bloc)
+    // 2. Store auth token securely
+    // 3. Check login state
+    // 4. Implement redirect logic like below:
+    //
+    // redirect: (BuildContext context, GoRouterState state) {
+    //   final bool isLoggedIn = authState.isLoggedIn;
+    //   final bool isGoingToAuth = state.matchedLocation == RouteNames.login ||
+    //       state.matchedLocation == RouteNames.signup ||
+    //       state.matchedLocation == RouteNames.forgotPassword;
+    //
+    //   if (!isLoggedIn && !isGoingToAuth &&
+    //       state.matchedLocation != RouteNames.splash &&
+    //       state.matchedLocation != RouteNames.onboarding) {
+    //     return RouteNames.login;
+    //   }
+    //   return null;
+    // },
     routes: [
       // Non-shell routes (full screen routes)
       GoRoute(
@@ -32,6 +54,22 @@ class AppRouter {
       GoRoute(
         path: RouteNames.onboarding,
         builder: (context, state) => const OnboardingScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.login,
+        builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.signup,
+        builder: (context, state) => const SignupScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.forgotPassword,
+        builder: (context, state) => const ForgotPasswordScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.addCollarTag,
+        builder: (context, state) => const AddCollarScreen(),
       ),
 
       // Shell route (contains bottom navigation and drawer)

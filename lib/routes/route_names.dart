@@ -4,6 +4,8 @@ class RouteNames {
   static const String splash = '/';
   static const String onboarding = '/onboarding';
   static const String login = '/login';
+  static const String signup = '/signup';
+  static const String forgotPassword = '/forgot-password';
 
   // Main app routes
   static const String dashboard = '/dashboard';

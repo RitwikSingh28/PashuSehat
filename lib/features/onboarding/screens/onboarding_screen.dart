@@ -44,8 +44,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         curve: Curves.easeInOut,
       );
     } else {
-      // TODO: Save first launch flag
-      context.go(RouteNames.dashboard);
+      // Navigate to login screen after onboarding
+      context.go(RouteNames.login);
     }
   }
 
