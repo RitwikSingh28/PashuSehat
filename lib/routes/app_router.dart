@@ -1,0 +1,123 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:cattle_health/core/widgets/app_shell.dart';
+import 'package:cattle_health/features/splash/screens/splash_screen.dart';
+import 'package:cattle_health/features/onboarding/screens/onboarding_screen.dart';
+import 'package:cattle_health/features/dashboard/screens/dashboard_screen.dart';
+import 'package:cattle_health/features/alerts/screens/alerts_screen.dart';
+import 'package:cattle_health/features/alerts/screens/alert_details_screen.dart';
+import 'package:cattle_health/features/cattle/screens/cattle_list_screen.dart';
+import 'package:cattle_health/features/cattle/screens/cattle_details_screen.dart';
+import 'package:cattle_health/features/cattle/screens/add_cattle_screen.dart';
+import 'package:cattle_health/features/collar/screens/add_collar_screen.dart';
+import 'package:cattle_health/features/profile/screens/profile_screen.dart';
+import 'package:cattle_health/features/contact/screens/contact_screen.dart';
+import 'package:cattle_health/routes/route_names.dart';
+import 'package:cattle_health/features/alerts/models/alert_model.dart';
+
+class AppRouter {
+  static final _rootNavigatorKey = GlobalKey<NavigatorState>();
+  static final _shellNavigatorKey = GlobalKey<NavigatorState>();
+
+  static final GoRouter router = GoRouter(
+    navigatorKey: _rootNavigatorKey,
+    initialLocation: RouteNames.splash,
+    routes: [
+      // Non-shell routes (full screen routes)
+      GoRoute(
+        path: RouteNames.splash,
+        builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.onboarding,
+        builder: (context, state) => const OnboardingScreen(),
+      ),
+
+      // Shell route (contains bottom navigation and drawer)
+      ShellRoute(
+        navigatorKey: _shellNavigatorKey,
+        builder: (context, state, child) {
+          // Determine current index based on location
+          int index = 0;
+          final location = state.matchedLocation;
+          if (location.startsWith(RouteNames.alerts)) {
+            index = 1;
+          } else if (location.startsWith(RouteNames.cattleList)) {
+            index = 2;
+          }
+          return AppShell(child: child, currentIndex: index);
+        },
+        routes: [
+          // Dashboard tab
+          GoRoute(
+            path: RouteNames.dashboard,
+            builder: (context, state) => const DashboardScreen(),
+          ),
+
+          // Alerts tab and details
+          GoRoute(
+            path: RouteNames.alerts,
+            builder: (context, state) => const AlertsScreen(),
+            routes: [
+              GoRoute(
+                path: ':id',
+                builder: (context, state) {
+                  final id = state.pathParameters['id']!;
+                  final mockAlert = Alert(
+                    id: id,
+                    cattleId: 'C001',
+                    cattleName: 'Gauri',
+                    tagId: 'TAG001',
+                    timestamp: DateTime.now(),
+                    type: AlertType.temperature,
+                    value: 39.5,
+                  );
+                  return AlertDetailsScreen(alert: mockAlert);
+                },
+              ),
+            ],
+          ),
+
+          // Cattle tab and details
+          GoRoute(
+            path: RouteNames.cattleList,
+            builder: (context, state) => const CattleListScreen(),
+            routes: [
+              GoRoute(
+                path: ':id',
+                builder: (context, state) {
+                  final id = state.pathParameters['id']!;
+                  return CattleDetailsScreen(id: id);
+                },
+              ),
+            ],
+          ),
+
+          // Profile (moved inside shell route)
+          GoRoute(
+            path: RouteNames.profile,
+            builder: (context, state) => const ProfileScreen(),
+          ),
+
+          // Add Cattle (moved inside shell route)
+          GoRoute(
+            path: RouteNames.addCattle,
+            builder: (context, state) => const AddCattleScreen(),
+          ),
+
+          // Add Collar Tag (moved inside shell route)
+          GoRoute(
+            path: RouteNames.addCollarTag,
+            builder: (context, state) => const AddCollarScreen(),
+          ),
+
+          // Contact Us (moved inside shell route)
+          GoRoute(
+            path: RouteNames.contactUs,
+            builder: (context, state) => const ContactScreen(),
+          ),
+        ],
+      ),
+    ],
+  );
+}
