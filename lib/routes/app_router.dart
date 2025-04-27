@@ -9,6 +9,7 @@ import 'package:cattle_health/features/alerts/screens/alert_details_screen.dart'
 import 'package:cattle_health/features/cattle/screens/cattle_list_screen.dart';
 import 'package:cattle_health/features/cattle/screens/cattle_details_screen.dart';
 import 'package:cattle_health/features/cattle/screens/add_cattle_screen.dart';
+import 'package:cattle_health/features/cattle/screens/add_note_screen.dart';
 import 'package:cattle_health/features/collar/screens/add_collar_screen.dart';
 import 'package:cattle_health/features/profile/screens/profile_screen.dart';
 import 'package:cattle_health/features/contact/screens/contact_screen.dart';
@@ -89,6 +90,14 @@ class AppRouter {
                   final id = state.pathParameters['id']!;
                   return CattleDetailsScreen(id: id);
                 },
+                routes: [
+                  GoRoute(
+                    path: 'add-note',
+                    builder: (context, state) => AddNoteScreen(
+                      cattleId: state.pathParameters['id']!,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

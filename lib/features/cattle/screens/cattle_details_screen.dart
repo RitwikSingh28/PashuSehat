@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:cattle_health/routes/route_names.dart';
 import 'package:cattle_health/features/cattle/models/cattle_model.dart';
 import 'package:cattle_health/features/cattle/widgets/metrics_chart.dart';
 import 'package:cattle_health/core/widgets/time_range_selector.dart';
@@ -102,9 +104,9 @@ class _CattleDetailsScreenState extends State<CattleDetailsScreen> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            if (DefaultTabController.of(context).index == 1) {
-              _showAddNoteDialog();
-            }
+            context.push(
+              RouteNames.getAddNotePath(widget.id),
+            ).then((added) => setState(() {})); // Refresh if note was added
           },
           label: const Text('Add Note'),
           icon: const Icon(Icons.add),
