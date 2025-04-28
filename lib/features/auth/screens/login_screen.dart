@@ -55,7 +55,6 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Logging in...')),
       );
-      print("Routing to ${RouteNames.dashboard}");
       GoRouter.of(context).go(RouteNames.dashboard);
     }
   }
