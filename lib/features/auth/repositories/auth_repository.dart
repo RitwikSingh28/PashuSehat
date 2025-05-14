@@ -94,54 +94,85 @@ class AuthRepository {
         },
       );
       final authResponse = AuthResponse.fromJson(response.data);
+      await _tokenStorage.saveTokens(
+        accessToken: authResponse.accessToken,
+        refreshToken: authResponse.refreshToken,
+      );
       return authResponse;
     } on DioException catch (e) {
       throw AuthError.fromDioError(e);
     }
   }
 
-  Future<AuthResponse> register({
+  Future<Map<String, dynamic>> register({
     required String phone,
     required String password,
     required String name,
+    required String farmAddress,
+    required String pinCode,
   }) async {
-    final response = await _dio.post(
-      ApiConstants.register,
-      data: {
-        'phone': phone,
-        'password': password,
-        'name': name,
-      },
-    );
+    try {
+      final response = await _dio.post(
+        ApiConstants.register,
+        data: {
+          'phoneNumber': phone,
+          'password': password,
+          'name': name,
+          'farmAddress': farmAddress,
+          'pinCode': pinCode,
+        },
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw AuthError.fromDioError(e);
+    }
+  }
 
-    final authResponse = AuthResponse.fromJson(response.data);
-    await _tokenStorage.saveTokens(
-      accessToken: authResponse.accessToken,
-      refreshToken: authResponse.refreshToken,
-    );
+  Future<AuthResponse> verifyRegistrationOtp(String userId, String phone, String otp) async {
+    try {
+      final response = await _dio.post(
+        ApiConstants.phoneVerify,
+        data: {
+          'phoneNumber': phone,
+          'otp': otp,
+        },
+      );
 
-    return authResponse;
+      final authResponse = AuthResponse.fromJson(response.data);
+      await _tokenStorage.saveTokens(
+        accessToken: authResponse.accessToken,
+        refreshToken: authResponse.refreshToken,
+      );
+
+      return authResponse;
+    } on DioException catch (e) {
+      throw AuthError.fromDioError(e);
+    }
   }
 
   Future<AuthResponse> login({
     required String phone,
     required String password,
   }) async {
-    final response = await _dio.post(
-      ApiConstants.loginWithPassword,
-      data: {
-        'phoneNumber': phone,
-        'password': password,
-      },
-    );
+    try {
+      final response = await _dio.post(
+        ApiConstants.loginWithPassword,
+        data: {
+          'phoneNumber': phone,
+          'password': password,
+        },
+      );
 
-    final authResponse = AuthResponse.fromJson(response.data);
-    await _tokenStorage.saveTokens(
-      accessToken: authResponse.accessToken,
-      refreshToken: authResponse.refreshToken,
-    );
+      final authResponse = AuthResponse.fromJson(response.data);
+      await _tokenStorage.saveTokens(
+        accessToken: authResponse.accessToken,
+        refreshToken: authResponse.refreshToken,
+      );
 
-    return authResponse;
+      return authResponse;
+    } on DioException catch (e) {
+      throw AuthError.fromDioError(e);
+    }
   }
 
   Future<void> logout() async {

@@ -11,15 +11,19 @@ class RegisterEvent extends AuthEvent {
   final String phone;
   final String password;
   final String name;
+  final String farmAddress;
+  final String pinCode;
 
   const RegisterEvent({
     required this.phone,
     required this.password,
     required this.name,
+    required this.farmAddress,
+    required this.pinCode,
   });
 
   @override
-  List<Object?> get props => [phone, password, name];
+  List<Object?> get props => [phone, password, name, farmAddress, pinCode];
 }
 
 class LoginEvent extends AuthEvent {
@@ -52,6 +56,21 @@ class VerifyOtpEvent extends AuthEvent {
 
   @override
   List<Object?> get props => [phone, otp];
+}
+
+class VerifyRegistrationOtpEvent extends AuthEvent {
+  final String userId;
+  final String phone;
+  final String otp;
+
+  const VerifyRegistrationOtpEvent({
+    required this.userId,
+    required this.phone,
+    required this.otp,
+  });
+
+  @override
+  List<Object?> get props => [userId, phone, otp];
 }
 
 class LogoutEvent extends AuthEvent {

@@ -5,6 +5,7 @@ class RouteNames {
   static const String onboarding = '/onboarding';
   static const String login = '/login';
   static const String signup = '/signup';
+  static const String verifyOtp = '/verify-otp';
   static const String forgotPassword = '/forgot-password';
 
   // Main app routes

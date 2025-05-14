@@ -25,6 +25,7 @@ mixin _$AuthState {
     required TResult Function() unauthenticated,
     required TResult Function(AuthError error) error,
     required TResult Function() otpSent,
+    required TResult Function(String userId, String phone) registrationSuccess,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
@@ -34,6 +35,7 @@ mixin _$AuthState {
     TResult? Function()? unauthenticated,
     TResult? Function(AuthError error)? error,
     TResult? Function()? otpSent,
+    TResult? Function(String userId, String phone)? registrationSuccess,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
@@ -43,6 +45,7 @@ mixin _$AuthState {
     TResult Function()? unauthenticated,
     TResult Function(AuthError error)? error,
     TResult Function()? otpSent,
+    TResult Function(String userId, String phone)? registrationSuccess,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -53,6 +56,7 @@ mixin _$AuthState {
     required TResult Function(_Unauthenticated value) unauthenticated,
     required TResult Function(_Error value) error,
     required TResult Function(_OtpSent value) otpSent,
+    required TResult Function(_RegistrationSuccess value) registrationSuccess,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
@@ -62,6 +66,7 @@ mixin _$AuthState {
     TResult? Function(_Unauthenticated value)? unauthenticated,
     TResult? Function(_Error value)? error,
     TResult? Function(_OtpSent value)? otpSent,
+    TResult? Function(_RegistrationSuccess value)? registrationSuccess,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
@@ -71,6 +76,7 @@ mixin _$AuthState {
     TResult Function(_Unauthenticated value)? unauthenticated,
     TResult Function(_Error value)? error,
     TResult Function(_OtpSent value)? otpSent,
+    TResult Function(_RegistrationSuccess value)? registrationSuccess,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
 }
@@ -144,6 +150,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function() unauthenticated,
     required TResult Function(AuthError error) error,
     required TResult Function() otpSent,
+    required TResult Function(String userId, String phone) registrationSuccess,
   }) {
     return initial();
   }
@@ -157,6 +164,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function()? unauthenticated,
     TResult? Function(AuthError error)? error,
     TResult? Function()? otpSent,
+    TResult? Function(String userId, String phone)? registrationSuccess,
   }) {
     return initial?.call();
   }
@@ -170,6 +178,7 @@ class _$InitialImpl implements _Initial {
     TResult Function()? unauthenticated,
     TResult Function(AuthError error)? error,
     TResult Function()? otpSent,
+    TResult Function(String userId, String phone)? registrationSuccess,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -187,6 +196,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function(_Unauthenticated value) unauthenticated,
     required TResult Function(_Error value) error,
     required TResult Function(_OtpSent value) otpSent,
+    required TResult Function(_RegistrationSuccess value) registrationSuccess,
   }) {
     return initial(this);
   }
@@ -200,6 +210,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function(_Unauthenticated value)? unauthenticated,
     TResult? Function(_Error value)? error,
     TResult? Function(_OtpSent value)? otpSent,
+    TResult? Function(_RegistrationSuccess value)? registrationSuccess,
   }) {
     return initial?.call(this);
   }
@@ -213,6 +224,7 @@ class _$InitialImpl implements _Initial {
     TResult Function(_Unauthenticated value)? unauthenticated,
     TResult Function(_Error value)? error,
     TResult Function(_OtpSent value)? otpSent,
+    TResult Function(_RegistrationSuccess value)? registrationSuccess,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -275,6 +287,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function() unauthenticated,
     required TResult Function(AuthError error) error,
     required TResult Function() otpSent,
+    required TResult Function(String userId, String phone) registrationSuccess,
   }) {
     return loading();
   }
@@ -288,6 +301,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function()? unauthenticated,
     TResult? Function(AuthError error)? error,
     TResult? Function()? otpSent,
+    TResult? Function(String userId, String phone)? registrationSuccess,
   }) {
     return loading?.call();
   }
@@ -301,6 +315,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function()? unauthenticated,
     TResult Function(AuthError error)? error,
     TResult Function()? otpSent,
+    TResult Function(String userId, String phone)? registrationSuccess,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -318,6 +333,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(_Unauthenticated value) unauthenticated,
     required TResult Function(_Error value) error,
     required TResult Function(_OtpSent value) otpSent,
+    required TResult Function(_RegistrationSuccess value) registrationSuccess,
   }) {
     return loading(this);
   }
@@ -331,6 +347,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(_Unauthenticated value)? unauthenticated,
     TResult? Function(_Error value)? error,
     TResult? Function(_OtpSent value)? otpSent,
+    TResult? Function(_RegistrationSuccess value)? registrationSuccess,
   }) {
     return loading?.call(this);
   }
@@ -344,6 +361,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function(_Unauthenticated value)? unauthenticated,
     TResult Function(_Error value)? error,
     TResult Function(_OtpSent value)? otpSent,
+    TResult Function(_RegistrationSuccess value)? registrationSuccess,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -445,6 +463,7 @@ class _$AuthenticatedImpl implements _Authenticated {
     required TResult Function() unauthenticated,
     required TResult Function(AuthError error) error,
     required TResult Function() otpSent,
+    required TResult Function(String userId, String phone) registrationSuccess,
   }) {
     return authenticated(user);
   }
@@ -458,6 +477,7 @@ class _$AuthenticatedImpl implements _Authenticated {
     TResult? Function()? unauthenticated,
     TResult? Function(AuthError error)? error,
     TResult? Function()? otpSent,
+    TResult? Function(String userId, String phone)? registrationSuccess,
   }) {
     return authenticated?.call(user);
   }
@@ -471,6 +491,7 @@ class _$AuthenticatedImpl implements _Authenticated {
     TResult Function()? unauthenticated,
     TResult Function(AuthError error)? error,
     TResult Function()? otpSent,
+    TResult Function(String userId, String phone)? registrationSuccess,
     required TResult orElse(),
   }) {
     if (authenticated != null) {
@@ -488,6 +509,7 @@ class _$AuthenticatedImpl implements _Authenticated {
     required TResult Function(_Unauthenticated value) unauthenticated,
     required TResult Function(_Error value) error,
     required TResult Function(_OtpSent value) otpSent,
+    required TResult Function(_RegistrationSuccess value) registrationSuccess,
   }) {
     return authenticated(this);
   }
@@ -501,6 +523,7 @@ class _$AuthenticatedImpl implements _Authenticated {
     TResult? Function(_Unauthenticated value)? unauthenticated,
     TResult? Function(_Error value)? error,
     TResult? Function(_OtpSent value)? otpSent,
+    TResult? Function(_RegistrationSuccess value)? registrationSuccess,
   }) {
     return authenticated?.call(this);
   }
@@ -514,6 +537,7 @@ class _$AuthenticatedImpl implements _Authenticated {
     TResult Function(_Unauthenticated value)? unauthenticated,
     TResult Function(_Error value)? error,
     TResult Function(_OtpSent value)? otpSent,
+    TResult Function(_RegistrationSuccess value)? registrationSuccess,
     required TResult orElse(),
   }) {
     if (authenticated != null) {
@@ -584,6 +608,7 @@ class _$UnauthenticatedImpl implements _Unauthenticated {
     required TResult Function() unauthenticated,
     required TResult Function(AuthError error) error,
     required TResult Function() otpSent,
+    required TResult Function(String userId, String phone) registrationSuccess,
   }) {
     return unauthenticated();
   }
@@ -597,6 +622,7 @@ class _$UnauthenticatedImpl implements _Unauthenticated {
     TResult? Function()? unauthenticated,
     TResult? Function(AuthError error)? error,
     TResult? Function()? otpSent,
+    TResult? Function(String userId, String phone)? registrationSuccess,
   }) {
     return unauthenticated?.call();
   }
@@ -610,6 +636,7 @@ class _$UnauthenticatedImpl implements _Unauthenticated {
     TResult Function()? unauthenticated,
     TResult Function(AuthError error)? error,
     TResult Function()? otpSent,
+    TResult Function(String userId, String phone)? registrationSuccess,
     required TResult orElse(),
   }) {
     if (unauthenticated != null) {
@@ -627,6 +654,7 @@ class _$UnauthenticatedImpl implements _Unauthenticated {
     required TResult Function(_Unauthenticated value) unauthenticated,
     required TResult Function(_Error value) error,
     required TResult Function(_OtpSent value) otpSent,
+    required TResult Function(_RegistrationSuccess value) registrationSuccess,
   }) {
     return unauthenticated(this);
   }
@@ -640,6 +668,7 @@ class _$UnauthenticatedImpl implements _Unauthenticated {
     TResult? Function(_Unauthenticated value)? unauthenticated,
     TResult? Function(_Error value)? error,
     TResult? Function(_OtpSent value)? otpSent,
+    TResult? Function(_RegistrationSuccess value)? registrationSuccess,
   }) {
     return unauthenticated?.call(this);
   }
@@ -653,6 +682,7 @@ class _$UnauthenticatedImpl implements _Unauthenticated {
     TResult Function(_Unauthenticated value)? unauthenticated,
     TResult Function(_Error value)? error,
     TResult Function(_OtpSent value)? otpSent,
+    TResult Function(_RegistrationSuccess value)? registrationSuccess,
     required TResult orElse(),
   }) {
     if (unauthenticated != null) {
@@ -754,6 +784,7 @@ class _$ErrorImpl implements _Error {
     required TResult Function() unauthenticated,
     required TResult Function(AuthError error) error,
     required TResult Function() otpSent,
+    required TResult Function(String userId, String phone) registrationSuccess,
   }) {
     return error(this.error);
   }
@@ -767,6 +798,7 @@ class _$ErrorImpl implements _Error {
     TResult? Function()? unauthenticated,
     TResult? Function(AuthError error)? error,
     TResult? Function()? otpSent,
+    TResult? Function(String userId, String phone)? registrationSuccess,
   }) {
     return error?.call(this.error);
   }
@@ -780,6 +812,7 @@ class _$ErrorImpl implements _Error {
     TResult Function()? unauthenticated,
     TResult Function(AuthError error)? error,
     TResult Function()? otpSent,
+    TResult Function(String userId, String phone)? registrationSuccess,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -797,6 +830,7 @@ class _$ErrorImpl implements _Error {
     required TResult Function(_Unauthenticated value) unauthenticated,
     required TResult Function(_Error value) error,
     required TResult Function(_OtpSent value) otpSent,
+    required TResult Function(_RegistrationSuccess value) registrationSuccess,
   }) {
     return error(this);
   }
@@ -810,6 +844,7 @@ class _$ErrorImpl implements _Error {
     TResult? Function(_Unauthenticated value)? unauthenticated,
     TResult? Function(_Error value)? error,
     TResult? Function(_OtpSent value)? otpSent,
+    TResult? Function(_RegistrationSuccess value)? registrationSuccess,
   }) {
     return error?.call(this);
   }
@@ -823,6 +858,7 @@ class _$ErrorImpl implements _Error {
     TResult Function(_Unauthenticated value)? unauthenticated,
     TResult Function(_Error value)? error,
     TResult Function(_OtpSent value)? otpSent,
+    TResult Function(_RegistrationSuccess value)? registrationSuccess,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -893,6 +929,7 @@ class _$OtpSentImpl implements _OtpSent {
     required TResult Function() unauthenticated,
     required TResult Function(AuthError error) error,
     required TResult Function() otpSent,
+    required TResult Function(String userId, String phone) registrationSuccess,
   }) {
     return otpSent();
   }
@@ -906,6 +943,7 @@ class _$OtpSentImpl implements _OtpSent {
     TResult? Function()? unauthenticated,
     TResult? Function(AuthError error)? error,
     TResult? Function()? otpSent,
+    TResult? Function(String userId, String phone)? registrationSuccess,
   }) {
     return otpSent?.call();
   }
@@ -919,6 +957,7 @@ class _$OtpSentImpl implements _OtpSent {
     TResult Function()? unauthenticated,
     TResult Function(AuthError error)? error,
     TResult Function()? otpSent,
+    TResult Function(String userId, String phone)? registrationSuccess,
     required TResult orElse(),
   }) {
     if (otpSent != null) {
@@ -936,6 +975,7 @@ class _$OtpSentImpl implements _OtpSent {
     required TResult Function(_Unauthenticated value) unauthenticated,
     required TResult Function(_Error value) error,
     required TResult Function(_OtpSent value) otpSent,
+    required TResult Function(_RegistrationSuccess value) registrationSuccess,
   }) {
     return otpSent(this);
   }
@@ -949,6 +989,7 @@ class _$OtpSentImpl implements _OtpSent {
     TResult? Function(_Unauthenticated value)? unauthenticated,
     TResult? Function(_Error value)? error,
     TResult? Function(_OtpSent value)? otpSent,
+    TResult? Function(_RegistrationSuccess value)? registrationSuccess,
   }) {
     return otpSent?.call(this);
   }
@@ -962,6 +1003,7 @@ class _$OtpSentImpl implements _OtpSent {
     TResult Function(_Unauthenticated value)? unauthenticated,
     TResult Function(_Error value)? error,
     TResult Function(_OtpSent value)? otpSent,
+    TResult Function(_RegistrationSuccess value)? registrationSuccess,
     required TResult orElse(),
   }) {
     if (otpSent != null) {
@@ -973,4 +1015,188 @@ class _$OtpSentImpl implements _OtpSent {
 
 abstract class _OtpSent implements AuthState {
   const factory _OtpSent() = _$OtpSentImpl;
+}
+
+/// @nodoc
+abstract class _$$RegistrationSuccessImplCopyWith<$Res> {
+  factory _$$RegistrationSuccessImplCopyWith(
+    _$RegistrationSuccessImpl value,
+    $Res Function(_$RegistrationSuccessImpl) then,
+  ) = __$$RegistrationSuccessImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String userId, String phone});
+}
+
+/// @nodoc
+class __$$RegistrationSuccessImplCopyWithImpl<$Res>
+    extends _$AuthStateCopyWithImpl<$Res, _$RegistrationSuccessImpl>
+    implements _$$RegistrationSuccessImplCopyWith<$Res> {
+  __$$RegistrationSuccessImplCopyWithImpl(
+    _$RegistrationSuccessImpl _value,
+    $Res Function(_$RegistrationSuccessImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of AuthState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? userId = null, Object? phone = null}) {
+    return _then(
+      _$RegistrationSuccessImpl(
+        null == userId
+            ? _value.userId
+            : userId // ignore: cast_nullable_to_non_nullable
+                as String,
+        null == phone
+            ? _value.phone
+            : phone // ignore: cast_nullable_to_non_nullable
+                as String,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+
+class _$RegistrationSuccessImpl implements _RegistrationSuccess {
+  const _$RegistrationSuccessImpl(this.userId, this.phone);
+
+  @override
+  final String userId;
+  @override
+  final String phone;
+
+  @override
+  String toString() {
+    return 'AuthState.registrationSuccess(userId: $userId, phone: $phone)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$RegistrationSuccessImpl &&
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.phone, phone) || other.phone == phone));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, userId, phone);
+
+  /// Create a copy of AuthState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$RegistrationSuccessImplCopyWith<_$RegistrationSuccessImpl> get copyWith =>
+      __$$RegistrationSuccessImplCopyWithImpl<_$RegistrationSuccessImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(User user) authenticated,
+    required TResult Function() unauthenticated,
+    required TResult Function(AuthError error) error,
+    required TResult Function() otpSent,
+    required TResult Function(String userId, String phone) registrationSuccess,
+  }) {
+    return registrationSuccess(userId, phone);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(User user)? authenticated,
+    TResult? Function()? unauthenticated,
+    TResult? Function(AuthError error)? error,
+    TResult? Function()? otpSent,
+    TResult? Function(String userId, String phone)? registrationSuccess,
+  }) {
+    return registrationSuccess?.call(userId, phone);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(User user)? authenticated,
+    TResult Function()? unauthenticated,
+    TResult Function(AuthError error)? error,
+    TResult Function()? otpSent,
+    TResult Function(String userId, String phone)? registrationSuccess,
+    required TResult orElse(),
+  }) {
+    if (registrationSuccess != null) {
+      return registrationSuccess(userId, phone);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Authenticated value) authenticated,
+    required TResult Function(_Unauthenticated value) unauthenticated,
+    required TResult Function(_Error value) error,
+    required TResult Function(_OtpSent value) otpSent,
+    required TResult Function(_RegistrationSuccess value) registrationSuccess,
+  }) {
+    return registrationSuccess(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Authenticated value)? authenticated,
+    TResult? Function(_Unauthenticated value)? unauthenticated,
+    TResult? Function(_Error value)? error,
+    TResult? Function(_OtpSent value)? otpSent,
+    TResult? Function(_RegistrationSuccess value)? registrationSuccess,
+  }) {
+    return registrationSuccess?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Authenticated value)? authenticated,
+    TResult Function(_Unauthenticated value)? unauthenticated,
+    TResult Function(_Error value)? error,
+    TResult Function(_OtpSent value)? otpSent,
+    TResult Function(_RegistrationSuccess value)? registrationSuccess,
+    required TResult orElse(),
+  }) {
+    if (registrationSuccess != null) {
+      return registrationSuccess(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _RegistrationSuccess implements AuthState {
+  const factory _RegistrationSuccess(final String userId, final String phone) =
+      _$RegistrationSuccessImpl;
+
+  String get userId;
+  String get phone;
+
+  /// Create a copy of AuthState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$RegistrationSuccessImplCopyWith<_$RegistrationSuccessImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

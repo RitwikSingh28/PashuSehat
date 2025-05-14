@@ -22,6 +22,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<CheckAuthStatusEvent>(_onCheckAuthStatus);
     on<RequestOtpEvent>(_onRequestOtp);
     on<VerifyOtpEvent>(_onVerifyOtp);
+    on<VerifyRegistrationOtpEvent>(_onVerifyRegistrationOtp);
   }
 
   Future<void> _onRegister(
@@ -31,13 +32,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       emit(const AuthState.loading());
 
-      final response = await _authRepository.register(
+      final responseData = await _authRepository.register(
         phone: event.phone,
         password: event.password,
         name: event.name,
+        farmAddress: event.farmAddress,
+        pinCode: event.pinCode,
       );
 
-      emit(AuthState.authenticated(response.user));
+      emit(AuthState.registrationSuccess(responseData['userId'] as String, event.phone));
     } catch (e) {
       emit(AuthState.error(
         AuthError(
@@ -92,6 +95,34 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+  Future<void> _onVerifyRegistrationOtp(
+    VerifyRegistrationOtpEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    try {
+      emit(const AuthState.loading());
+      final response = await _authRepository.verifyRegistrationOtp(
+        event.userId,
+        event.phone,
+        event.otp,
+      );
+      await _tokenStorage.saveTokens(
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      );
+      emit(AuthState.authenticated(response.user));
+    } on AuthError catch (e) {
+      emit(AuthState.error(e));
+    } catch (e) {
+      emit(AuthState.error(
+        AuthError(
+          error: 'VERIFICATION_FAILED',
+          message: e.toString(),
+        ),
+      ));
+    }
+  }
+
   Future<void> _onLogin(
     LoginEvent event,
     Emitter<AuthState> emit,
@@ -102,6 +133,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final response = await _authRepository.login(
         phone: event.phone,
         password: event.password,
+      );
+
+      await _tokenStorage.saveTokens(
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
       );
 
       emit(AuthState.authenticated(response.user));

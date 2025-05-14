@@ -12,4 +12,5 @@ class AuthState with _$AuthState {
   const factory AuthState.unauthenticated() = _Unauthenticated;
   const factory AuthState.error(AuthError error) = _Error;
   const factory AuthState.otpSent() = _OtpSent;
+  const factory AuthState.registrationSuccess(String userId, String phone) = _RegistrationSuccess;
 }
