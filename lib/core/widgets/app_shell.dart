@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:cattle_health/features/auth/bloc/auth_bloc.dart';
+import 'package:cattle_health/features/auth/bloc/auth_event.dart';
 import 'package:cattle_health/routes/route_names.dart';
 
 final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -164,6 +167,7 @@ class AppShell extends StatelessWidget {
               onPressed: () {
                 context.pop(); // Close dialog
                 // Clear navigation stack and go to login
+                context.read<AuthBloc>().add(const LogoutEvent());
                 // Using go instead of pushReplacement to clear the stack
                 context.go(RouteNames.login);
               },
