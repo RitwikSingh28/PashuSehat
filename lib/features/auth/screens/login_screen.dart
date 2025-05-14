@@ -68,22 +68,29 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   void _handleOtpLogin() {
     if (_formKey.currentState?.validate() ?? false) {
       if (!_isOtpSent) {
-        // TODO: Implement OTP sending
-        // Will use: '+91${_otpPhoneController.text}'
-        setState(() {
-          _isOtpSent = true;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('OTP sent!')),
-        );
-        _startResendTimer();
+        context.read<AuthBloc>().add(
+              RequestOtpEvent(
+                phone: '+91${_otpPhoneController.text}',
+              ),
+            );
       } else {
-        // TODO: Implement OTP verification
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Verifying OTP...')),
-        );
+        context.read<AuthBloc>().add(
+              VerifyOtpEvent(
+                phone: '+91${_otpPhoneController.text}',
+                otp: _otpController.text,
+              ),
+            );
       }
     }
+  }
+
+  void _handleResendOtp() {
+    context.read<AuthBloc>().add(
+          RequestOtpEvent(
+            phone: '+91${_otpPhoneController.text}',
+          ),
+        );
+    _startResendTimer();
   }
 
   Widget _buildPasswordLogin(ThemeData theme) {
@@ -222,12 +229,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
             )
           else
             TextButton(
-              onPressed: () {
-                _startResendTimer();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('OTP resent!')),
-                );
-              },
+              onPressed: _handleResendOtp,
               child: const Text('Resend OTP'),
             ),
         ],
@@ -274,6 +276,15 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                 content: Text(error.message),
                 backgroundColor: Colors.red,
               ),
+            );
+          },
+          otpSent: () {
+            setState(() {
+              _isOtpSent = true;
+            });
+            _startResendTimer();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('OTP sent successfully!')),
             );
           },
           orElse: () {},

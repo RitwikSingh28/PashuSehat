@@ -23,7 +23,6 @@ AuthError _$AuthErrorFromJson(Map<String, dynamic> json) {
 mixin _$AuthError {
   String get error => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
-  Map<String, dynamic>? get details => throw _privateConstructorUsedError;
 
   /// Serializes this AuthError to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -40,7 +39,7 @@ abstract class $AuthErrorCopyWith<$Res> {
   factory $AuthErrorCopyWith(AuthError value, $Res Function(AuthError) then) =
       _$AuthErrorCopyWithImpl<$Res, AuthError>;
   @useResult
-  $Res call({String error, String message, Map<String, dynamic>? details});
+  $Res call({String error, String message});
 }
 
 /// @nodoc
@@ -57,11 +56,7 @@ class _$AuthErrorCopyWithImpl<$Res, $Val extends AuthError>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? error = null,
-    Object? message = null,
-    Object? details = freezed,
-  }) {
+  $Res call({Object? error = null, Object? message = null}) {
     return _then(
       _value.copyWith(
             error:
@@ -74,11 +69,6 @@ class _$AuthErrorCopyWithImpl<$Res, $Val extends AuthError>
                     ? _value.message
                     : message // ignore: cast_nullable_to_non_nullable
                         as String,
-            details:
-                freezed == details
-                    ? _value.details
-                    : details // ignore: cast_nullable_to_non_nullable
-                        as Map<String, dynamic>?,
           )
           as $Val,
     );
@@ -94,7 +84,7 @@ abstract class _$$AuthErrorImplCopyWith<$Res>
   ) = __$$AuthErrorImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String error, String message, Map<String, dynamic>? details});
+  $Res call({String error, String message});
 }
 
 /// @nodoc
@@ -110,11 +100,7 @@ class __$$AuthErrorImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? error = null,
-    Object? message = null,
-    Object? details = freezed,
-  }) {
+  $Res call({Object? error = null, Object? message = null}) {
     return _then(
       _$AuthErrorImpl(
         error:
@@ -127,11 +113,6 @@ class __$$AuthErrorImplCopyWithImpl<$Res>
                 ? _value.message
                 : message // ignore: cast_nullable_to_non_nullable
                     as String,
-        details:
-            freezed == details
-                ? _value._details
-                : details // ignore: cast_nullable_to_non_nullable
-                    as Map<String, dynamic>?,
       ),
     );
   }
@@ -141,31 +122,23 @@ class __$$AuthErrorImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$AuthErrorImpl implements _AuthError {
   const _$AuthErrorImpl({
-    required this.error,
-    required this.message,
-    final Map<String, dynamic>? details,
-  }) : _details = details;
+    this.error = 'UNKNOWN_ERROR',
+    this.message = 'An unknown error occurred',
+  });
 
   factory _$AuthErrorImpl.fromJson(Map<String, dynamic> json) =>
       _$$AuthErrorImplFromJson(json);
 
   @override
+  @JsonKey()
   final String error;
   @override
+  @JsonKey()
   final String message;
-  final Map<String, dynamic>? _details;
-  @override
-  Map<String, dynamic>? get details {
-    final value = _details;
-    if (value == null) return null;
-    if (_details is EqualUnmodifiableMapView) return _details;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(value);
-  }
 
   @override
   String toString() {
-    return 'AuthError(error: $error, message: $message, details: $details)';
+    return 'AuthError(error: $error, message: $message)';
   }
 
   @override
@@ -174,18 +147,12 @@ class _$AuthErrorImpl implements _AuthError {
         (other.runtimeType == runtimeType &&
             other is _$AuthErrorImpl &&
             (identical(other.error, error) || other.error == error) &&
-            (identical(other.message, message) || other.message == message) &&
-            const DeepCollectionEquality().equals(other._details, _details));
+            (identical(other.message, message) || other.message == message));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-    runtimeType,
-    error,
-    message,
-    const DeepCollectionEquality().hash(_details),
-  );
+  int get hashCode => Object.hash(runtimeType, error, message);
 
   /// Create a copy of AuthError
   /// with the given fields replaced by the non-null parameter values.
@@ -202,11 +169,8 @@ class _$AuthErrorImpl implements _AuthError {
 }
 
 abstract class _AuthError implements AuthError {
-  const factory _AuthError({
-    required final String error,
-    required final String message,
-    final Map<String, dynamic>? details,
-  }) = _$AuthErrorImpl;
+  const factory _AuthError({final String error, final String message}) =
+      _$AuthErrorImpl;
 
   factory _AuthError.fromJson(Map<String, dynamic> json) =
       _$AuthErrorImpl.fromJson;
@@ -215,8 +179,6 @@ abstract class _AuthError implements AuthError {
   String get error;
   @override
   String get message;
-  @override
-  Map<String, dynamic>? get details;
 
   /// Create a copy of AuthError
   /// with the given fields replaced by the non-null parameter values.

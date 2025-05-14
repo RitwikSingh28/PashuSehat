@@ -24,6 +24,7 @@ mixin _$AuthState {
     required TResult Function(User user) authenticated,
     required TResult Function() unauthenticated,
     required TResult Function(AuthError error) error,
+    required TResult Function() otpSent,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
@@ -32,6 +33,7 @@ mixin _$AuthState {
     TResult? Function(User user)? authenticated,
     TResult? Function()? unauthenticated,
     TResult? Function(AuthError error)? error,
+    TResult? Function()? otpSent,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
@@ -40,6 +42,7 @@ mixin _$AuthState {
     TResult Function(User user)? authenticated,
     TResult Function()? unauthenticated,
     TResult Function(AuthError error)? error,
+    TResult Function()? otpSent,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -49,6 +52,7 @@ mixin _$AuthState {
     required TResult Function(_Authenticated value) authenticated,
     required TResult Function(_Unauthenticated value) unauthenticated,
     required TResult Function(_Error value) error,
+    required TResult Function(_OtpSent value) otpSent,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
@@ -57,6 +61,7 @@ mixin _$AuthState {
     TResult? Function(_Authenticated value)? authenticated,
     TResult? Function(_Unauthenticated value)? unauthenticated,
     TResult? Function(_Error value)? error,
+    TResult? Function(_OtpSent value)? otpSent,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
@@ -65,6 +70,7 @@ mixin _$AuthState {
     TResult Function(_Authenticated value)? authenticated,
     TResult Function(_Unauthenticated value)? unauthenticated,
     TResult Function(_Error value)? error,
+    TResult Function(_OtpSent value)? otpSent,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
 }
@@ -137,6 +143,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function(User user) authenticated,
     required TResult Function() unauthenticated,
     required TResult Function(AuthError error) error,
+    required TResult Function() otpSent,
   }) {
     return initial();
   }
@@ -149,6 +156,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function(User user)? authenticated,
     TResult? Function()? unauthenticated,
     TResult? Function(AuthError error)? error,
+    TResult? Function()? otpSent,
   }) {
     return initial?.call();
   }
@@ -161,6 +169,7 @@ class _$InitialImpl implements _Initial {
     TResult Function(User user)? authenticated,
     TResult Function()? unauthenticated,
     TResult Function(AuthError error)? error,
+    TResult Function()? otpSent,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -177,6 +186,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function(_Authenticated value) authenticated,
     required TResult Function(_Unauthenticated value) unauthenticated,
     required TResult Function(_Error value) error,
+    required TResult Function(_OtpSent value) otpSent,
   }) {
     return initial(this);
   }
@@ -189,6 +199,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function(_Authenticated value)? authenticated,
     TResult? Function(_Unauthenticated value)? unauthenticated,
     TResult? Function(_Error value)? error,
+    TResult? Function(_OtpSent value)? otpSent,
   }) {
     return initial?.call(this);
   }
@@ -201,6 +212,7 @@ class _$InitialImpl implements _Initial {
     TResult Function(_Authenticated value)? authenticated,
     TResult Function(_Unauthenticated value)? unauthenticated,
     TResult Function(_Error value)? error,
+    TResult Function(_OtpSent value)? otpSent,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -262,6 +274,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(User user) authenticated,
     required TResult Function() unauthenticated,
     required TResult Function(AuthError error) error,
+    required TResult Function() otpSent,
   }) {
     return loading();
   }
@@ -274,6 +287,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(User user)? authenticated,
     TResult? Function()? unauthenticated,
     TResult? Function(AuthError error)? error,
+    TResult? Function()? otpSent,
   }) {
     return loading?.call();
   }
@@ -286,6 +300,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function(User user)? authenticated,
     TResult Function()? unauthenticated,
     TResult Function(AuthError error)? error,
+    TResult Function()? otpSent,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -302,6 +317,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(_Authenticated value) authenticated,
     required TResult Function(_Unauthenticated value) unauthenticated,
     required TResult Function(_Error value) error,
+    required TResult Function(_OtpSent value) otpSent,
   }) {
     return loading(this);
   }
@@ -314,6 +330,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(_Authenticated value)? authenticated,
     TResult? Function(_Unauthenticated value)? unauthenticated,
     TResult? Function(_Error value)? error,
+    TResult? Function(_OtpSent value)? otpSent,
   }) {
     return loading?.call(this);
   }
@@ -326,6 +343,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function(_Authenticated value)? authenticated,
     TResult Function(_Unauthenticated value)? unauthenticated,
     TResult Function(_Error value)? error,
+    TResult Function(_OtpSent value)? otpSent,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -426,6 +444,7 @@ class _$AuthenticatedImpl implements _Authenticated {
     required TResult Function(User user) authenticated,
     required TResult Function() unauthenticated,
     required TResult Function(AuthError error) error,
+    required TResult Function() otpSent,
   }) {
     return authenticated(user);
   }
@@ -438,6 +457,7 @@ class _$AuthenticatedImpl implements _Authenticated {
     TResult? Function(User user)? authenticated,
     TResult? Function()? unauthenticated,
     TResult? Function(AuthError error)? error,
+    TResult? Function()? otpSent,
   }) {
     return authenticated?.call(user);
   }
@@ -450,6 +470,7 @@ class _$AuthenticatedImpl implements _Authenticated {
     TResult Function(User user)? authenticated,
     TResult Function()? unauthenticated,
     TResult Function(AuthError error)? error,
+    TResult Function()? otpSent,
     required TResult orElse(),
   }) {
     if (authenticated != null) {
@@ -466,6 +487,7 @@ class _$AuthenticatedImpl implements _Authenticated {
     required TResult Function(_Authenticated value) authenticated,
     required TResult Function(_Unauthenticated value) unauthenticated,
     required TResult Function(_Error value) error,
+    required TResult Function(_OtpSent value) otpSent,
   }) {
     return authenticated(this);
   }
@@ -478,6 +500,7 @@ class _$AuthenticatedImpl implements _Authenticated {
     TResult? Function(_Authenticated value)? authenticated,
     TResult? Function(_Unauthenticated value)? unauthenticated,
     TResult? Function(_Error value)? error,
+    TResult? Function(_OtpSent value)? otpSent,
   }) {
     return authenticated?.call(this);
   }
@@ -490,6 +513,7 @@ class _$AuthenticatedImpl implements _Authenticated {
     TResult Function(_Authenticated value)? authenticated,
     TResult Function(_Unauthenticated value)? unauthenticated,
     TResult Function(_Error value)? error,
+    TResult Function(_OtpSent value)? otpSent,
     required TResult orElse(),
   }) {
     if (authenticated != null) {
@@ -559,6 +583,7 @@ class _$UnauthenticatedImpl implements _Unauthenticated {
     required TResult Function(User user) authenticated,
     required TResult Function() unauthenticated,
     required TResult Function(AuthError error) error,
+    required TResult Function() otpSent,
   }) {
     return unauthenticated();
   }
@@ -571,6 +596,7 @@ class _$UnauthenticatedImpl implements _Unauthenticated {
     TResult? Function(User user)? authenticated,
     TResult? Function()? unauthenticated,
     TResult? Function(AuthError error)? error,
+    TResult? Function()? otpSent,
   }) {
     return unauthenticated?.call();
   }
@@ -583,6 +609,7 @@ class _$UnauthenticatedImpl implements _Unauthenticated {
     TResult Function(User user)? authenticated,
     TResult Function()? unauthenticated,
     TResult Function(AuthError error)? error,
+    TResult Function()? otpSent,
     required TResult orElse(),
   }) {
     if (unauthenticated != null) {
@@ -599,6 +626,7 @@ class _$UnauthenticatedImpl implements _Unauthenticated {
     required TResult Function(_Authenticated value) authenticated,
     required TResult Function(_Unauthenticated value) unauthenticated,
     required TResult Function(_Error value) error,
+    required TResult Function(_OtpSent value) otpSent,
   }) {
     return unauthenticated(this);
   }
@@ -611,6 +639,7 @@ class _$UnauthenticatedImpl implements _Unauthenticated {
     TResult? Function(_Authenticated value)? authenticated,
     TResult? Function(_Unauthenticated value)? unauthenticated,
     TResult? Function(_Error value)? error,
+    TResult? Function(_OtpSent value)? otpSent,
   }) {
     return unauthenticated?.call(this);
   }
@@ -623,6 +652,7 @@ class _$UnauthenticatedImpl implements _Unauthenticated {
     TResult Function(_Authenticated value)? authenticated,
     TResult Function(_Unauthenticated value)? unauthenticated,
     TResult Function(_Error value)? error,
+    TResult Function(_OtpSent value)? otpSent,
     required TResult orElse(),
   }) {
     if (unauthenticated != null) {
@@ -723,6 +753,7 @@ class _$ErrorImpl implements _Error {
     required TResult Function(User user) authenticated,
     required TResult Function() unauthenticated,
     required TResult Function(AuthError error) error,
+    required TResult Function() otpSent,
   }) {
     return error(this.error);
   }
@@ -735,6 +766,7 @@ class _$ErrorImpl implements _Error {
     TResult? Function(User user)? authenticated,
     TResult? Function()? unauthenticated,
     TResult? Function(AuthError error)? error,
+    TResult? Function()? otpSent,
   }) {
     return error?.call(this.error);
   }
@@ -747,6 +779,7 @@ class _$ErrorImpl implements _Error {
     TResult Function(User user)? authenticated,
     TResult Function()? unauthenticated,
     TResult Function(AuthError error)? error,
+    TResult Function()? otpSent,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -763,6 +796,7 @@ class _$ErrorImpl implements _Error {
     required TResult Function(_Authenticated value) authenticated,
     required TResult Function(_Unauthenticated value) unauthenticated,
     required TResult Function(_Error value) error,
+    required TResult Function(_OtpSent value) otpSent,
   }) {
     return error(this);
   }
@@ -775,6 +809,7 @@ class _$ErrorImpl implements _Error {
     TResult? Function(_Authenticated value)? authenticated,
     TResult? Function(_Unauthenticated value)? unauthenticated,
     TResult? Function(_Error value)? error,
+    TResult? Function(_OtpSent value)? otpSent,
   }) {
     return error?.call(this);
   }
@@ -787,6 +822,7 @@ class _$ErrorImpl implements _Error {
     TResult Function(_Authenticated value)? authenticated,
     TResult Function(_Unauthenticated value)? unauthenticated,
     TResult Function(_Error value)? error,
+    TResult Function(_OtpSent value)? otpSent,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -806,4 +842,135 @@ abstract class _Error implements AuthState {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$OtpSentImplCopyWith<$Res> {
+  factory _$$OtpSentImplCopyWith(
+    _$OtpSentImpl value,
+    $Res Function(_$OtpSentImpl) then,
+  ) = __$$OtpSentImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$OtpSentImplCopyWithImpl<$Res>
+    extends _$AuthStateCopyWithImpl<$Res, _$OtpSentImpl>
+    implements _$$OtpSentImplCopyWith<$Res> {
+  __$$OtpSentImplCopyWithImpl(
+    _$OtpSentImpl _value,
+    $Res Function(_$OtpSentImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of AuthState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$OtpSentImpl implements _OtpSent {
+  const _$OtpSentImpl();
+
+  @override
+  String toString() {
+    return 'AuthState.otpSent()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$OtpSentImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(User user) authenticated,
+    required TResult Function() unauthenticated,
+    required TResult Function(AuthError error) error,
+    required TResult Function() otpSent,
+  }) {
+    return otpSent();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(User user)? authenticated,
+    TResult? Function()? unauthenticated,
+    TResult? Function(AuthError error)? error,
+    TResult? Function()? otpSent,
+  }) {
+    return otpSent?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(User user)? authenticated,
+    TResult Function()? unauthenticated,
+    TResult Function(AuthError error)? error,
+    TResult Function()? otpSent,
+    required TResult orElse(),
+  }) {
+    if (otpSent != null) {
+      return otpSent();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Authenticated value) authenticated,
+    required TResult Function(_Unauthenticated value) unauthenticated,
+    required TResult Function(_Error value) error,
+    required TResult Function(_OtpSent value) otpSent,
+  }) {
+    return otpSent(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Authenticated value)? authenticated,
+    TResult? Function(_Unauthenticated value)? unauthenticated,
+    TResult? Function(_Error value)? error,
+    TResult? Function(_OtpSent value)? otpSent,
+  }) {
+    return otpSent?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Authenticated value)? authenticated,
+    TResult Function(_Unauthenticated value)? unauthenticated,
+    TResult Function(_Error value)? error,
+    TResult Function(_OtpSent value)? otpSent,
+    required TResult orElse(),
+  }) {
+    if (otpSent != null) {
+      return otpSent(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _OtpSent implements AuthState {
+  const factory _OtpSent() = _$OtpSentImpl;
 }

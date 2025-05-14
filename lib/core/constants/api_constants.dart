@@ -6,4 +6,6 @@ class ApiConstants {
   static const String loginWithPassword = '/auth/login/password';
   static const String refresh = '/auth/refresh';
   static const String logout = '/auth/logout';
+  static const String otpRequest = '/auth/otp/request';
+  static const String otpVerify = '/auth/login/otp';
 }

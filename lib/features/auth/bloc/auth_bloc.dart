@@ -20,6 +20,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LoginEvent>(_onLogin);
     on<LogoutEvent>(_onLogout);
     on<CheckAuthStatusEvent>(_onCheckAuthStatus);
+    on<RequestOtpEvent>(_onRequestOtp);
+    on<VerifyOtpEvent>(_onVerifyOtp);
   }
 
   Future<void> _onRegister(
@@ -40,6 +42,50 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthState.error(
         AuthError(
           error: 'REGISTRATION_FAILED',
+          message: e.toString(),
+        ),
+      ));
+    }
+  }
+
+  Future<void> _onRequestOtp(
+    RequestOtpEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    try {
+      emit(const AuthState.loading());
+      await _authRepository.requestOtp(event.phone);
+      emit(const AuthState.otpSent());
+    } on AuthError catch (e) {
+      emit(AuthState.error(e));
+    } catch (e) {
+      emit(AuthState.error(
+        AuthError(
+          error: 'OTP_REQUEST_FAILED',
+          message: e.toString(),
+        ),
+      ));
+    }
+  }
+
+  Future<void> _onVerifyOtp(
+    VerifyOtpEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    try {
+      emit(const AuthState.loading());
+      final response = await _authRepository.verifyOtp(event.phone, event.otp);
+      await _tokenStorage.saveTokens(
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      );
+      emit(AuthState.authenticated(response.user));
+    } on AuthError catch (e) {
+      emit(AuthState.error(e));
+    } catch (e) {
+      emit(AuthState.error(
+        AuthError(
+          error: 'OTP_VERIFICATION_FAILED',
           message: e.toString(),
         ),
       ));

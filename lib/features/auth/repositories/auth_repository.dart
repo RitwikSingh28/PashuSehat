@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:cattle_health/core/constants/api_constants.dart';
+import 'package:cattle_health/features/auth/models/auth_error.dart';
 import 'package:cattle_health/features/auth/models/auth_response.dart';
 import 'package:cattle_health/features/auth/models/user_model.dart';
 import 'package:cattle_health/features/auth/services/token_storage.dart';
@@ -68,6 +69,35 @@ class AuthRepository {
       }
     }
     handler.next(err);
+  }
+
+  Future<void> requestOtp(String phoneNumber) async {
+    try {
+      await _dio.post(
+        ApiConstants.otpRequest,
+        data: {
+          'phoneNumber': phoneNumber,
+        },
+      );
+    } on DioException catch (e) {
+      throw AuthError.fromDioError(e);
+    }
+  }
+
+  Future<AuthResponse> verifyOtp(String phoneNumber, String otp) async {
+    try {
+      final response = await _dio.post(
+        ApiConstants.otpVerify,
+        data: {
+          'phoneNumber': phoneNumber,
+          'otp': otp,
+        },
+      );
+      final authResponse = AuthResponse.fromJson(response.data);
+      return authResponse;
+    } on DioException catch (e) {
+      throw AuthError.fromDioError(e);
+    }
   }
 
   Future<AuthResponse> register({
