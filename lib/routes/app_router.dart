@@ -1,3 +1,4 @@
+import 'package:cattle_health/features/cattle/screens/live_telemetry_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cattle_health/core/widgets/app_shell.dart';
@@ -126,6 +127,13 @@ class AppRouter {
                     path: 'add-note',
                     builder: (context, state) => AddNoteScreen(
                       id: state.pathParameters['id']!,
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'live',
+                    name: 'live_telemetry',
+                    builder: (context, state) => LiveTelemetryScreen(
+                      cattleId: state.pathParameters['id']!,
                     ),
                   ),
                 ],

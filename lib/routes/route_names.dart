@@ -15,6 +15,7 @@ class RouteNames {
   static const String cattleList = '/cattle';
   static const String cattleDetails = '/cattle/:id';
   static const String addCattle = '/cattle/add';
+  static const String liveTelemetry = 'cattle/:id/live';
   static const String addNote = '/cattle/:id/add-note';
   static const String addCollarTag = '/collar-tag/add';
   static const String profile = '/profile';
@@ -24,4 +25,5 @@ class RouteNames {
   static String getCattleDetailsPath(String id) => '/cattle/$id';
   static String getAlertDetailsPath(String id) => '/alerts/$id';
   static String getAddNotePath(String id) => '/cattle/$id/add-note';
+  static String getLiveTelemetryPath(String id) => '/cattle/$id/live';
 }

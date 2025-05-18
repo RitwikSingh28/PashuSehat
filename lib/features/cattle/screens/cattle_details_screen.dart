@@ -207,6 +207,19 @@ class _CattleDetailsScreenState extends State<CattleDetailsScreen> {
                           style: theme.textTheme.titleLarge,
                         ),
                         const SizedBox(height: 16),
+                        OutlinedButton.icon(
+                          onPressed: () {
+                            context.push(
+                              RouteNames.getLiveTelemetryPath(widget.id),
+                            );
+                          },
+                          icon: const Icon(Icons.online_prediction),
+                          label: const Text('View Live Data'),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: theme.colorScheme.primary,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
                         Center(
                           child: TimeRangeSelector(
                             selectedRange: _selectedRange,
