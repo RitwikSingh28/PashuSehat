@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cattle_health/features/auth/bloc/auth_bloc.dart';
 import 'package:cattle_health/features/auth/bloc/auth_event.dart';
+import 'package:cattle_health/features/auth/bloc/auth_state.dart';
 import 'package:cattle_health/routes/route_names.dart';
 
 final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -25,90 +26,159 @@ class AppShell extends StatelessWidget {
       key: scaffoldKey,
       body: child,
       drawer: Drawer(
-        child: Column(
-          children: [
-            // User Header
-            UserAccountsDrawerHeader(
-              currentAccountPicture: const CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Icon(Icons.person_outline),
-              ),
-              accountName: const Text('User Name'), // TODO: Replace with actual user data
-              accountEmail: const Text('user@example.com'),
-              decoration: BoxDecoration(
-                color: theme.primaryColor,
-              ),
-            ),
-
-            // Main Menu Items
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  // Home
-                  ListTile(
-                    leading: const Icon(Icons.home),
-                    title: const Text('Home'),
-                    onTap: () {
-                      context.pop(); // Close drawer
-                      context.go(RouteNames.dashboard);
-                    },
+        child: BlocBuilder<AuthBloc, AuthState>(
+          builder: (context, state) {
+            return Column(
+              children: [
+                // User Header
+                state.maybeWhen(
+                  authenticated: (user) => UserAccountsDrawerHeader(
+                    currentAccountPicture: CircleAvatar(
+                      backgroundColor: theme.colorScheme.primaryContainer,
+                      child: Text(
+                        user.name.isNotEmpty ? user.name[0].toUpperCase() : '?',
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                    accountName: Text(
+                      user.name,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    accountEmail: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '+${user.phoneNumber}',
+                          style: TextStyle(
+                            color: theme.colorScheme.onPrimary.withOpacity(0.9),
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          user.farmLocation.address,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: theme.colorScheme.onPrimary.withOpacity(0.7),
+                            height: 1.2,
+                            ),
+                          ),
+                      ],
+                    ),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primary,
+                    ),
                   ),
-
-                  // Profile
-                  ListTile(
-                    leading: const Icon(Icons.person),
-                    title: const Text('Profile'),
-                    onTap: () {
-                      context.pop(); // Close drawer
-                      context.go(RouteNames.profile);
-                    },
+                  orElse: () => UserAccountsDrawerHeader(
+                    currentAccountPicture: CircleAvatar(
+                      backgroundColor: theme.colorScheme.primaryContainer,
+                      child: Icon(
+                        Icons.person_outline,
+                        color: theme.colorScheme.primary,
+                      ),
+                    ),
+                    accountName: const Text('Guest User'),
+                    accountEmail: const Text('Please login to continue'),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primary,
+                    ),
                   ),
+                ),
 
-                  const Divider(),
+                // Main Menu Items
+                Expanded(
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: [
+                      // Home
+                      ListTile(
+                        leading: const Icon(Icons.home),
+                        title: const Text('Home'),
+                        onTap: () {
+                          context.pop(); // Close drawer
+                          context.go(RouteNames.dashboard);
+                        },
+                      ),
 
-                  // Cattle Management
-                  ListTile(
-                    leading: const Icon(Icons.add_circle_outline),
-                    title: const Text('Add Cattle'),
-                    onTap: () {
-                      context.pop();
-                      context.go(RouteNames.addCattle);
-                    },
+                      // Profile
+                      ListTile(
+                        leading: const Icon(Icons.person),
+                        title: const Text('Profile'),
+                        onTap: () {
+                          context.pop(); // Close drawer
+                          context.go(RouteNames.profile);
+                        },
+                      ),
+
+                      const Divider(),
+
+                      // Cattle Management
+                      ListTile(
+                        leading: const Icon(Icons.add_circle_outline),
+                        title: const Text('Add Cattle'),
+                        onTap: () {
+                          context.pop();
+                          context.go(RouteNames.addCattle);
+                        },
+                      ),
+
+                      ListTile(
+                        leading: const Icon(Icons.nfc),
+                        title: const Text('Add Collar Tag'),
+                        onTap: () {
+                          context.pop();
+                          context.go(RouteNames.addCollarTag);
+                        },
+                      ),
+                    ],
                   ),
+                ),
 
-                  ListTile(
-                    leading: const Icon(Icons.nfc),
-                    title: const Text('Add Collar Tag'),
-                    onTap: () {
-                      context.pop();
-                      context.go(RouteNames.addCollarTag);
-                    },
+                // Bottom Menu Items
+                const Divider(),
+                ListTile(
+                  leading: const Icon(Icons.contact_support_outlined),
+                  title: const Text('Contact Us'),
+                  onTap: () {
+                    context.pop();
+                    context.go(RouteNames.contactUs);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.logout),
+                  title: const Text('Logout'),
+                  onTap: () {
+                    context.pop();
+                    _showLogoutDialog(context);
+                  },
+                ),
+
+                // App Version
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.info_outline,
+                        size: 16,
+                        color: theme.textTheme.bodySmall?.color,
+                      ),
+                      const SizedBox(width: 8),
+                      Text('v1.0.0',
+                        style: theme.textTheme.bodySmall,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-
-            // Bottom Menu Items
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.contact_support_outlined),
-              title: const Text('Contact Us'),
-              onTap: () {
-                context.pop();
-                context.go(RouteNames.contactUs);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Logout'),
-              onTap: () {
-                context.pop();
-                _showLogoutDialog(context);
-              },
-            ),
-            const SizedBox(height: 16), // Bottom padding
-          ],
+                ),
+              ],
+            );
+          },
         ),
       ),
       bottomNavigationBar: _buildBottomNav(context),

@@ -8,11 +8,11 @@ import 'package:cattle_health/features/auth/services/token_storage.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository _authRepository;
-  final TokenStorage _tokenStorage;
+  final AuthStorage _tokenStorage;
 
   AuthBloc({
     required AuthRepository authRepository,
-    required TokenStorage tokenStorage,
+    required AuthStorage tokenStorage,
   })  : _authRepository = authRepository,
         _tokenStorage = tokenStorage,
         super(const AuthState.initial()) {
@@ -110,6 +110,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         accessToken: response.accessToken,
         refreshToken: response.refreshToken,
       );
+      await _tokenStorage.saveUser(response.user);
+      await _tokenStorage.saveUser(response.user);
       emit(AuthState.authenticated(response.user));
     } on AuthError catch (e) {
       emit(AuthState.error(e));
@@ -139,6 +141,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         accessToken: response.accessToken,
         refreshToken: response.refreshToken,
       );
+      await _tokenStorage.saveUser(response.user);
 
       emit(AuthState.authenticated(response.user));
     } catch (e) {
@@ -171,17 +174,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     try {
-      final token = await _tokenStorage.getAccessToken();
-      if (token != null) {
-        // TODO: Add API call to validate token and get user info
-        // For now, just consider having a token as being authenticated
-        emit(AuthState.authenticated(
-          const User(
-            userId: '',
-            phoneNumber: '',
-            name: '',
-          ),
-        ));
+      final user = await _tokenStorage.getUser();
+      final accessToken = await _tokenStorage.getAccessToken();
+
+      if (user != null && accessToken != null) {
+        emit(AuthState.authenticated(user));
       } else {
         emit(const AuthState.unauthenticated());
       }

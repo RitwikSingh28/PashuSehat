@@ -21,11 +21,11 @@ class PashuSehatApp extends StatelessWidget {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(
-          create: (context) => TokenStorage(),
+          create: (context) => AuthStorage(),
         ),
         RepositoryProvider(
           create: (context) => AuthRepository(
-            tokenStorage: context.read<TokenStorage>(),
+            tokenStorage: context.read<AuthStorage>(),
           ),
         ),
       ],
@@ -37,7 +37,7 @@ class PashuSehatApp extends StatelessWidget {
           BlocProvider(
             create: (context) => AuthBloc(
               authRepository: context.read<AuthRepository>(),
-              tokenStorage: context.read<TokenStorage>(),
+              tokenStorage: context.read<AuthStorage>(),
             )..add(const CheckAuthStatusEvent()),
           ),
         ],

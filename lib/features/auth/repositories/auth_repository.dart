@@ -8,11 +8,11 @@ import 'package:cattle_health/features/auth/services/token_storage.dart';
 
 class AuthRepository {
   final Dio _dio;
-  final TokenStorage _tokenStorage;
+  final AuthStorage _tokenStorage;
 
-  AuthRepository({Dio? dio, TokenStorage? tokenStorage})
+  AuthRepository({Dio? dio, AuthStorage? tokenStorage})
       : _dio = dio ?? Dio(BaseOptions(baseUrl: ApiConstants.baseUrl)),
-        _tokenStorage = tokenStorage ?? TokenStorage() {
+        _tokenStorage = tokenStorage ?? AuthStorage() {
     _dio.interceptors.addAll([
       PrettyDioLogger(
         requestHeader: true,

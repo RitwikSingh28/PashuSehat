@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:cattle_health/core/widgets/app_shell.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cattle_health/features/auth/bloc/auth_bloc.dart';
+import 'package:cattle_health/features/auth/bloc/auth_state.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -10,267 +12,182 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  // TODO: Replace with actual user data
-  final Map<String, String> _userData = {
-    'name': 'John Doe',
-    'email': 'john.doe@example.com',
-    'phone': '+91 9876543210',
-    'farmName': 'Green Meadows Farm',
-    'farmLocation': '123, Rural Area Road',
-    'pinCode': '560001',
-    'district': 'Bangalore Rural',
-    'state': 'Karnataka',
-  };
-
-  bool _isEditing = false;
   final _formKey = GlobalKey<FormState>();
-  late final Map<String, TextEditingController> _controllers;
+  final _nameController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _farmAddressController = TextEditingController();
+  final _pinCodeController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    // Initialize controllers with user data
-    _controllers = _userData.map((key, value) =>
-        MapEntry(key, TextEditingController(text: value)));
+    _loadUserData();
+  }
+
+  void _loadUserData() {
+    final state = context.read<AuthBloc>().state;
+    state.maybeWhen(
+      authenticated: (user) {
+        _nameController.text = user.name;
+        // Remove the +91 prefix if present
+        _phoneController.text = user.phoneNumber.replaceFirst(RegExp(r'^\+?91'), '');
+        _farmAddressController.text = user.farmLocation.address;
+        _pinCodeController.text = user.farmLocation.pinCode;
+      },
+      orElse: () {},
+    );
   }
 
   @override
   void dispose() {
-    // Dispose all controllers
-    for (var controller in _controllers.values) {
-      controller.dispose();
-    }
+    _nameController.dispose();
+    _phoneController.dispose();
+    _farmAddressController.dispose();
+    _pinCodeController.dispose();
     super.dispose();
-  }
-
-  void _toggleEdit() {
-    setState(() {
-      if (_isEditing) {
-        // Save changes
-        if (_formKey.currentState?.validate() ?? false) {
-          _userData.forEach((key, _) {
-            _userData[key] = _controllers[key]!.text;
-          });
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Profile updated successfully')),
-          );
-        } else {
-          return;
-        }
-      }
-      _isEditing = !_isEditing;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () => scaffoldKey.currentState?.openDrawer(),
-        ),
         title: const Text('Profile'),
-        actions: [
-          IconButton(
-            icon: Icon(_isEditing ? Icons.save : Icons.edit),
-            onPressed: _toggleEdit,
-          ),
-        ],
       ),
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
-              // Profile Picture Section
-              Stack(
-                children: [
-                  CircleAvatar(
-                    radius: 60,
-                    backgroundColor: Colors.grey[200],
-                    child: const Icon(
-                      Icons.person,
-                      size: 60,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  if (_isEditing)
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: const BoxDecoration(
-                          color: Colors.blue,
-                          shape: BoxShape.circle,
-                        ),
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.camera_alt,
-                            color: Colors.white,
-                            size: 20,
+      body: BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, state) {
+          return state.maybeWhen(
+            authenticated: (user) => SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Profile Header
+                    Center(
+                      child: Column(
+                        children: [
+                          CircleAvatar(
+                            radius: 50,
+                            backgroundColor: Colors.transparent,
+                            child: Icon(
+                              Icons.person_rounded,
+                              size: 64,
+                              color: theme.colorScheme.primary,
+                            ),
                           ),
-                          onPressed: () {
-                            // TODO: Implement image picker
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Profile picture update coming soon'),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Member since ${_formatDate(user.createdAt)}',
+                            style: theme.textTheme.bodySmall,
+                          ),
+                          if (user.lastLogin != null)
+                            Text(
+                              'Last login: ${_formatDate(user.lastLogin)}',
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
                               ),
-                            );
-                          },
-                        ),
+                            ),
+                        ],
                       ),
                     ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              // User Details Form
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    _buildTextField(
-                      label: 'Name',
-                      controller: _controllers['name']!,
-                      icon: Icons.person_outline,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your name';
-                        }
-                        return null;
-                      },
-                    ),
-                    _buildTextField(
-                      label: 'Email',
-                      controller: _controllers['email']!,
-                      icon: Icons.email_outlined,
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
-                        }
-                        if (!value.contains('@')) {
-                          return 'Please enter a valid email';
-                        }
-                        return null;
-                      },
-                    ),
-                    _buildTextField(
-                      label: 'Phone',
-                      controller: _controllers['phone']!,
-                      icon: Icons.phone_outlined,
-                      keyboardType: TextInputType.phone,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your phone number';
-                        }
-                        if (value.length < 10) {
-                          return 'Please enter a valid phone number';
-                        }
-                        return null;
-                      },
-                    ),
-                    _buildTextField(
-                      label: 'Farm Name',
-                      controller: _controllers['farmName']!,
-                      icon: Icons.home_work_outlined,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your farm name';
-                        }
-                        return null;
-                      },
-                    ),
-                    _buildTextField(
-                      label: 'Farm Location',
-                      controller: _controllers['farmLocation']!,
-                      icon: Icons.location_on_outlined,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your farm location';
-                        }
-                        return null;
-                      },
-                    ),
-                    _buildTextField(
-                      label: 'PIN Code',
-                      controller: _controllers['pinCode']!,
-                      icon: Icons.pin_outlined,
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your PIN code';
-                        }
-                        if (value.length != 6) {
-                          return 'PIN code must be 6 digits';
-                        }
-                        return null;
-                      },
-                    ),
-                    _buildTextField(
-                      label: 'District',
-                      controller: _controllers['district']!,
-                      icon: Icons.location_city_outlined,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your district';
-                        }
-                        return null;
-                      },
-                    ),
-                    _buildTextField(
-                      label: 'State',
-                      controller: _controllers['state']!,
-                      icon: Icons.map_outlined,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your state';
-                        }
-                        return null;
-                      },
+                    const SizedBox(height: 32),
+
+                    // Profile Form
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Personal Information',
+                              style: theme.textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            TextFormField(
+                              controller: _nameController,
+                              decoration: const InputDecoration(
+                                labelText: 'Full Name',
+                                prefixIcon: Icon(Icons.person),
+                                border: OutlineInputBorder(),
+                              ),
+                              textCapitalization: TextCapitalization.words,
+                              enabled: false,
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              controller: _phoneController,
+                              decoration: const InputDecoration(
+                                labelText: 'Phone Number',
+                                prefixIcon: Icon(Icons.phone),
+                                prefixText: '+91 ',
+                                border: OutlineInputBorder(),
+                              ),
+                              keyboardType: TextInputType.phone,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(10),
+                              ],
+                              enabled: false,
+                            ),
+                            const SizedBox(height: 24),
+                            Text(
+                              'Farm Information',
+                              style: theme.textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            TextFormField(
+                              controller: _farmAddressController,
+                              decoration: const InputDecoration(
+                                labelText: 'Farm Address',
+                                prefixIcon: Icon(Icons.location_on),
+                                border: OutlineInputBorder(),
+                              ),
+                              maxLines: 2,
+                              textCapitalization: TextCapitalization.words,
+                              enabled: false,
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              controller: _pinCodeController,
+                              decoration: const InputDecoration(
+                                labelText: 'PIN Code',
+                                prefixIcon: Icon(Icons.location_city),
+                                border: OutlineInputBorder(),
+                              ),
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(6),
+                              ],
+                              enabled: false,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
+            ),
+            orElse: () => const Center(
+              child: Text('Please login to view profile'),
+            ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildTextField({
-    required String label,
-    required TextEditingController controller,
-    required IconData icon,
-    TextInputType? keyboardType,
-    String? Function(String?)? validator,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
-      child: TextFormField(
-        controller: controller,
-        enabled: _isEditing,
-        keyboardType: keyboardType,
-        decoration: InputDecoration(
-          labelText: label,
-          prefixIcon: Icon(icon),
-          border: const OutlineInputBorder(),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.grey[300]!,
-            ),
-          ),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.blue,
-            ),
-          ),
-        ),
-        validator: validator,
-      ),
-    );
+  String _formatDate(DateTime? date) {
+    if (date == null) return 'N/A';
+    return '${date.day}/${date.month}/${date.year}';
   }
 }
