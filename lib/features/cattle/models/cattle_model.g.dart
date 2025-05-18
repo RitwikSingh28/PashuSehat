@@ -7,35 +7,46 @@ part of 'cattle_model.dart';
 // **************************************************************************
 
 _$CattleImpl _$$CattleImplFromJson(Map<String, dynamic> json) => _$CattleImpl(
-  id: json['id'] as String,
-  name: json['name'] as String,
+  cattleId: json['cattleId'] as String,
+  userId: json['userId'] as String,
   tagId: json['tagId'] as String,
-  dateOfBirth: DateTime.parse(json['dateOfBirth'] as String),
+  name: json['name'] as String,
+  dateOfBirth: _dateFromMillis(json['dateOfBirth']),
+  gender: $enumDecode(_$GenderEnumMap, json['gender']),
+  ageGroup: $enumDecode(_$AgeGroupEnumMap, json['ageGroup']),
+  breed: json['breed'] as String,
+  governmentId: json['governmentId'] as String?,
+  fatherName: json['fatherName'] as String?,
+  motherName: json['motherName'] as String?,
   notes:
-      (json['notes'] as List<dynamic>)
-          .map((e) => CattleNote.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      (json['notes'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+      const [],
+  createdAt: _dateFromMillis(json['createdAt']),
+  updatedAt: _dateFromMillis(json['updatedAt']),
 );
 
 Map<String, dynamic> _$$CattleImplToJson(_$CattleImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
+      'cattleId': instance.cattleId,
+      'userId': instance.userId,
       'tagId': instance.tagId,
-      'dateOfBirth': instance.dateOfBirth.toIso8601String(),
+      'name': instance.name,
+      'dateOfBirth': _dateToIso(instance.dateOfBirth),
+      'gender': _$GenderEnumMap[instance.gender]!,
+      'ageGroup': _$AgeGroupEnumMap[instance.ageGroup]!,
+      'breed': instance.breed,
+      'governmentId': instance.governmentId,
+      'fatherName': instance.fatherName,
+      'motherName': instance.motherName,
       'notes': instance.notes,
+      'createdAt': instance.createdAt?.toIso8601String(),
+      'updatedAt': instance.updatedAt?.toIso8601String(),
     };
 
-_$CattleNoteImpl _$$CattleNoteImplFromJson(Map<String, dynamic> json) =>
-    _$CattleNoteImpl(
-      id: json['id'] as String,
-      content: json['content'] as String,
-      timestamp: DateTime.parse(json['timestamp'] as String),
-    );
+const _$GenderEnumMap = {Gender.male: 'MALE', Gender.female: 'FEMALE'};
 
-Map<String, dynamic> _$$CattleNoteImplToJson(_$CattleNoteImpl instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'content': instance.content,
-      'timestamp': instance.timestamp.toIso8601String(),
-    };
+const _$AgeGroupEnumMap = {
+  AgeGroup.calf: 'CALF',
+  AgeGroup.adult: 'ADULT',
+  AgeGroup.retired: 'RETIRED',
+};

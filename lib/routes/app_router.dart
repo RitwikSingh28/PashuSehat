@@ -125,7 +125,7 @@ class AppRouter {
                   GoRoute(
                     path: 'add-note',
                     builder: (context, state) => AddNoteScreen(
-                      cattleId: state.pathParameters['id']!,
+                      id: state.pathParameters['id']!,
                     ),
                   ),
                 ],

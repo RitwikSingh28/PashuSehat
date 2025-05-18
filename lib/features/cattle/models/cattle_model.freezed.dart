@@ -21,11 +21,23 @@ Cattle _$CattleFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Cattle {
-  String get id => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
+  String get cattleId => throw _privateConstructorUsedError;
+  String get userId => throw _privateConstructorUsedError;
   String get tagId => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _dateFromMillis, toJson: _dateToIso)
   DateTime get dateOfBirth => throw _privateConstructorUsedError;
-  List<CattleNote> get notes => throw _privateConstructorUsedError;
+  Gender get gender => throw _privateConstructorUsedError;
+  AgeGroup get ageGroup => throw _privateConstructorUsedError;
+  String get breed => throw _privateConstructorUsedError;
+  String? get governmentId => throw _privateConstructorUsedError;
+  String? get fatherName => throw _privateConstructorUsedError;
+  String? get motherName => throw _privateConstructorUsedError;
+  List<String> get notes => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _dateFromMillis)
+  DateTime? get createdAt => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _dateFromMillis)
+  DateTime? get updatedAt => throw _privateConstructorUsedError;
 
   /// Serializes this Cattle to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -42,11 +54,21 @@ abstract class $CattleCopyWith<$Res> {
       _$CattleCopyWithImpl<$Res, Cattle>;
   @useResult
   $Res call({
-    String id,
-    String name,
+    String cattleId,
+    String userId,
     String tagId,
+    String name,
+    @JsonKey(fromJson: _dateFromMillis, toJson: _dateToIso)
     DateTime dateOfBirth,
-    List<CattleNote> notes,
+    Gender gender,
+    AgeGroup ageGroup,
+    String breed,
+    String? governmentId,
+    String? fatherName,
+    String? motherName,
+    List<String> notes,
+    @JsonKey(fromJson: _dateFromMillis) DateTime? createdAt,
+    @JsonKey(fromJson: _dateFromMillis) DateTime? updatedAt,
   });
 }
 
@@ -65,39 +87,93 @@ class _$CattleCopyWithImpl<$Res, $Val extends Cattle>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? name = null,
+    Object? cattleId = null,
+    Object? userId = null,
     Object? tagId = null,
+    Object? name = null,
     Object? dateOfBirth = null,
+    Object? gender = null,
+    Object? ageGroup = null,
+    Object? breed = null,
+    Object? governmentId = freezed,
+    Object? fatherName = freezed,
+    Object? motherName = freezed,
     Object? notes = null,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
   }) {
     return _then(
       _value.copyWith(
-            id:
-                null == id
-                    ? _value.id
-                    : id // ignore: cast_nullable_to_non_nullable
+            cattleId:
+                null == cattleId
+                    ? _value.cattleId
+                    : cattleId // ignore: cast_nullable_to_non_nullable
                         as String,
-            name:
-                null == name
-                    ? _value.name
-                    : name // ignore: cast_nullable_to_non_nullable
+            userId:
+                null == userId
+                    ? _value.userId
+                    : userId // ignore: cast_nullable_to_non_nullable
                         as String,
             tagId:
                 null == tagId
                     ? _value.tagId
                     : tagId // ignore: cast_nullable_to_non_nullable
                         as String,
+            name:
+                null == name
+                    ? _value.name
+                    : name // ignore: cast_nullable_to_non_nullable
+                        as String,
             dateOfBirth:
                 null == dateOfBirth
                     ? _value.dateOfBirth
                     : dateOfBirth // ignore: cast_nullable_to_non_nullable
                         as DateTime,
+            gender:
+                null == gender
+                    ? _value.gender
+                    : gender // ignore: cast_nullable_to_non_nullable
+                        as Gender,
+            ageGroup:
+                null == ageGroup
+                    ? _value.ageGroup
+                    : ageGroup // ignore: cast_nullable_to_non_nullable
+                        as AgeGroup,
+            breed:
+                null == breed
+                    ? _value.breed
+                    : breed // ignore: cast_nullable_to_non_nullable
+                        as String,
+            governmentId:
+                freezed == governmentId
+                    ? _value.governmentId
+                    : governmentId // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            fatherName:
+                freezed == fatherName
+                    ? _value.fatherName
+                    : fatherName // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            motherName:
+                freezed == motherName
+                    ? _value.motherName
+                    : motherName // ignore: cast_nullable_to_non_nullable
+                        as String?,
             notes:
                 null == notes
                     ? _value.notes
                     : notes // ignore: cast_nullable_to_non_nullable
-                        as List<CattleNote>,
+                        as List<String>,
+            createdAt:
+                freezed == createdAt
+                    ? _value.createdAt
+                    : createdAt // ignore: cast_nullable_to_non_nullable
+                        as DateTime?,
+            updatedAt:
+                freezed == updatedAt
+                    ? _value.updatedAt
+                    : updatedAt // ignore: cast_nullable_to_non_nullable
+                        as DateTime?,
           )
           as $Val,
     );
@@ -113,11 +189,21 @@ abstract class _$$CattleImplCopyWith<$Res> implements $CattleCopyWith<$Res> {
   @override
   @useResult
   $Res call({
-    String id,
-    String name,
+    String cattleId,
+    String userId,
     String tagId,
+    String name,
+    @JsonKey(fromJson: _dateFromMillis, toJson: _dateToIso)
     DateTime dateOfBirth,
-    List<CattleNote> notes,
+    Gender gender,
+    AgeGroup ageGroup,
+    String breed,
+    String? governmentId,
+    String? fatherName,
+    String? motherName,
+    List<String> notes,
+    @JsonKey(fromJson: _dateFromMillis) DateTime? createdAt,
+    @JsonKey(fromJson: _dateFromMillis) DateTime? updatedAt,
   });
 }
 
@@ -135,39 +221,93 @@ class __$$CattleImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? name = null,
+    Object? cattleId = null,
+    Object? userId = null,
     Object? tagId = null,
+    Object? name = null,
     Object? dateOfBirth = null,
+    Object? gender = null,
+    Object? ageGroup = null,
+    Object? breed = null,
+    Object? governmentId = freezed,
+    Object? fatherName = freezed,
+    Object? motherName = freezed,
     Object? notes = null,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
   }) {
     return _then(
       _$CattleImpl(
-        id:
-            null == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
+        cattleId:
+            null == cattleId
+                ? _value.cattleId
+                : cattleId // ignore: cast_nullable_to_non_nullable
                     as String,
-        name:
-            null == name
-                ? _value.name
-                : name // ignore: cast_nullable_to_non_nullable
+        userId:
+            null == userId
+                ? _value.userId
+                : userId // ignore: cast_nullable_to_non_nullable
                     as String,
         tagId:
             null == tagId
                 ? _value.tagId
                 : tagId // ignore: cast_nullable_to_non_nullable
                     as String,
+        name:
+            null == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                    as String,
         dateOfBirth:
             null == dateOfBirth
                 ? _value.dateOfBirth
                 : dateOfBirth // ignore: cast_nullable_to_non_nullable
                     as DateTime,
+        gender:
+            null == gender
+                ? _value.gender
+                : gender // ignore: cast_nullable_to_non_nullable
+                    as Gender,
+        ageGroup:
+            null == ageGroup
+                ? _value.ageGroup
+                : ageGroup // ignore: cast_nullable_to_non_nullable
+                    as AgeGroup,
+        breed:
+            null == breed
+                ? _value.breed
+                : breed // ignore: cast_nullable_to_non_nullable
+                    as String,
+        governmentId:
+            freezed == governmentId
+                ? _value.governmentId
+                : governmentId // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        fatherName:
+            freezed == fatherName
+                ? _value.fatherName
+                : fatherName // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        motherName:
+            freezed == motherName
+                ? _value.motherName
+                : motherName // ignore: cast_nullable_to_non_nullable
+                    as String?,
         notes:
             null == notes
                 ? _value._notes
                 : notes // ignore: cast_nullable_to_non_nullable
-                    as List<CattleNote>,
+                    as List<String>,
+        createdAt:
+            freezed == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                    as DateTime?,
+        updatedAt:
+            freezed == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
+                    as DateTime?,
       ),
     );
   }
@@ -177,35 +317,68 @@ class __$$CattleImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CattleImpl implements _Cattle {
   const _$CattleImpl({
-    required this.id,
-    required this.name,
+    required this.cattleId,
+    required this.userId,
     required this.tagId,
+    required this.name,
+    @JsonKey(fromJson: _dateFromMillis, toJson: _dateToIso)
     required this.dateOfBirth,
-    required final List<CattleNote> notes,
+    required this.gender,
+    required this.ageGroup,
+    required this.breed,
+    this.governmentId,
+    this.fatherName,
+    this.motherName,
+    final List<String> notes = const [],
+    @JsonKey(fromJson: _dateFromMillis) this.createdAt,
+    @JsonKey(fromJson: _dateFromMillis) this.updatedAt,
   }) : _notes = notes;
 
   factory _$CattleImpl.fromJson(Map<String, dynamic> json) =>
       _$$CattleImplFromJson(json);
 
   @override
-  final String id;
+  final String cattleId;
   @override
-  final String name;
+  final String userId;
   @override
   final String tagId;
   @override
-  final DateTime dateOfBirth;
-  final List<CattleNote> _notes;
+  final String name;
   @override
-  List<CattleNote> get notes {
+  @JsonKey(fromJson: _dateFromMillis, toJson: _dateToIso)
+  final DateTime dateOfBirth;
+  @override
+  final Gender gender;
+  @override
+  final AgeGroup ageGroup;
+  @override
+  final String breed;
+  @override
+  final String? governmentId;
+  @override
+  final String? fatherName;
+  @override
+  final String? motherName;
+  final List<String> _notes;
+  @override
+  @JsonKey()
+  List<String> get notes {
     if (_notes is EqualUnmodifiableListView) return _notes;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_notes);
   }
 
   @override
+  @JsonKey(fromJson: _dateFromMillis)
+  final DateTime? createdAt;
+  @override
+  @JsonKey(fromJson: _dateFromMillis)
+  final DateTime? updatedAt;
+
+  @override
   String toString() {
-    return 'Cattle(id: $id, name: $name, tagId: $tagId, dateOfBirth: $dateOfBirth, notes: $notes)';
+    return 'Cattle(cattleId: $cattleId, userId: $userId, tagId: $tagId, name: $name, dateOfBirth: $dateOfBirth, gender: $gender, ageGroup: $ageGroup, breed: $breed, governmentId: $governmentId, fatherName: $fatherName, motherName: $motherName, notes: $notes, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -213,23 +386,48 @@ class _$CattleImpl implements _Cattle {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CattleImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.name, name) || other.name == name) &&
+            (identical(other.cattleId, cattleId) ||
+                other.cattleId == cattleId) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.tagId, tagId) || other.tagId == tagId) &&
+            (identical(other.name, name) || other.name == name) &&
             (identical(other.dateOfBirth, dateOfBirth) ||
                 other.dateOfBirth == dateOfBirth) &&
-            const DeepCollectionEquality().equals(other._notes, _notes));
+            (identical(other.gender, gender) || other.gender == gender) &&
+            (identical(other.ageGroup, ageGroup) ||
+                other.ageGroup == ageGroup) &&
+            (identical(other.breed, breed) || other.breed == breed) &&
+            (identical(other.governmentId, governmentId) ||
+                other.governmentId == governmentId) &&
+            (identical(other.fatherName, fatherName) ||
+                other.fatherName == fatherName) &&
+            (identical(other.motherName, motherName) ||
+                other.motherName == motherName) &&
+            const DeepCollectionEquality().equals(other._notes, _notes) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
     runtimeType,
-    id,
-    name,
+    cattleId,
+    userId,
     tagId,
+    name,
     dateOfBirth,
+    gender,
+    ageGroup,
+    breed,
+    governmentId,
+    fatherName,
+    motherName,
     const DeepCollectionEquality().hash(_notes),
+    createdAt,
+    updatedAt,
   );
 
   /// Create a copy of Cattle
@@ -248,232 +446,61 @@ class _$CattleImpl implements _Cattle {
 
 abstract class _Cattle implements Cattle {
   const factory _Cattle({
-    required final String id,
-    required final String name,
+    required final String cattleId,
+    required final String userId,
     required final String tagId,
+    required final String name,
+    @JsonKey(fromJson: _dateFromMillis, toJson: _dateToIso)
     required final DateTime dateOfBirth,
-    required final List<CattleNote> notes,
+    required final Gender gender,
+    required final AgeGroup ageGroup,
+    required final String breed,
+    final String? governmentId,
+    final String? fatherName,
+    final String? motherName,
+    final List<String> notes,
+    @JsonKey(fromJson: _dateFromMillis) final DateTime? createdAt,
+    @JsonKey(fromJson: _dateFromMillis) final DateTime? updatedAt,
   }) = _$CattleImpl;
 
   factory _Cattle.fromJson(Map<String, dynamic> json) = _$CattleImpl.fromJson;
 
   @override
-  String get id;
+  String get cattleId;
   @override
-  String get name;
+  String get userId;
   @override
   String get tagId;
   @override
+  String get name;
+  @override
+  @JsonKey(fromJson: _dateFromMillis, toJson: _dateToIso)
   DateTime get dateOfBirth;
   @override
-  List<CattleNote> get notes;
+  Gender get gender;
+  @override
+  AgeGroup get ageGroup;
+  @override
+  String get breed;
+  @override
+  String? get governmentId;
+  @override
+  String? get fatherName;
+  @override
+  String? get motherName;
+  @override
+  List<String> get notes;
+  @override
+  @JsonKey(fromJson: _dateFromMillis)
+  DateTime? get createdAt;
+  @override
+  @JsonKey(fromJson: _dateFromMillis)
+  DateTime? get updatedAt;
 
   /// Create a copy of Cattle
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CattleImplCopyWith<_$CattleImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-CattleNote _$CattleNoteFromJson(Map<String, dynamic> json) {
-  return _CattleNote.fromJson(json);
-}
-
-/// @nodoc
-mixin _$CattleNote {
-  String get id => throw _privateConstructorUsedError;
-  String get content => throw _privateConstructorUsedError;
-  DateTime get timestamp => throw _privateConstructorUsedError;
-
-  /// Serializes this CattleNote to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of CattleNote
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $CattleNoteCopyWith<CattleNote> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $CattleNoteCopyWith<$Res> {
-  factory $CattleNoteCopyWith(
-    CattleNote value,
-    $Res Function(CattleNote) then,
-  ) = _$CattleNoteCopyWithImpl<$Res, CattleNote>;
-  @useResult
-  $Res call({String id, String content, DateTime timestamp});
-}
-
-/// @nodoc
-class _$CattleNoteCopyWithImpl<$Res, $Val extends CattleNote>
-    implements $CattleNoteCopyWith<$Res> {
-  _$CattleNoteCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of CattleNote
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? content = null,
-    Object? timestamp = null,
-  }) {
-    return _then(
-      _value.copyWith(
-            id:
-                null == id
-                    ? _value.id
-                    : id // ignore: cast_nullable_to_non_nullable
-                        as String,
-            content:
-                null == content
-                    ? _value.content
-                    : content // ignore: cast_nullable_to_non_nullable
-                        as String,
-            timestamp:
-                null == timestamp
-                    ? _value.timestamp
-                    : timestamp // ignore: cast_nullable_to_non_nullable
-                        as DateTime,
-          )
-          as $Val,
-    );
-  }
-}
-
-/// @nodoc
-abstract class _$$CattleNoteImplCopyWith<$Res>
-    implements $CattleNoteCopyWith<$Res> {
-  factory _$$CattleNoteImplCopyWith(
-    _$CattleNoteImpl value,
-    $Res Function(_$CattleNoteImpl) then,
-  ) = __$$CattleNoteImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String id, String content, DateTime timestamp});
-}
-
-/// @nodoc
-class __$$CattleNoteImplCopyWithImpl<$Res>
-    extends _$CattleNoteCopyWithImpl<$Res, _$CattleNoteImpl>
-    implements _$$CattleNoteImplCopyWith<$Res> {
-  __$$CattleNoteImplCopyWithImpl(
-    _$CattleNoteImpl _value,
-    $Res Function(_$CattleNoteImpl) _then,
-  ) : super(_value, _then);
-
-  /// Create a copy of CattleNote
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? content = null,
-    Object? timestamp = null,
-  }) {
-    return _then(
-      _$CattleNoteImpl(
-        id:
-            null == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                    as String,
-        content:
-            null == content
-                ? _value.content
-                : content // ignore: cast_nullable_to_non_nullable
-                    as String,
-        timestamp:
-            null == timestamp
-                ? _value.timestamp
-                : timestamp // ignore: cast_nullable_to_non_nullable
-                    as DateTime,
-      ),
-    );
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$CattleNoteImpl implements _CattleNote {
-  const _$CattleNoteImpl({
-    required this.id,
-    required this.content,
-    required this.timestamp,
-  });
-
-  factory _$CattleNoteImpl.fromJson(Map<String, dynamic> json) =>
-      _$$CattleNoteImplFromJson(json);
-
-  @override
-  final String id;
-  @override
-  final String content;
-  @override
-  final DateTime timestamp;
-
-  @override
-  String toString() {
-    return 'CattleNote(id: $id, content: $content, timestamp: $timestamp)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CattleNoteImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.content, content) || other.content == content) &&
-            (identical(other.timestamp, timestamp) ||
-                other.timestamp == timestamp));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, id, content, timestamp);
-
-  /// Create a copy of CattleNote
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$CattleNoteImplCopyWith<_$CattleNoteImpl> get copyWith =>
-      __$$CattleNoteImplCopyWithImpl<_$CattleNoteImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$CattleNoteImplToJson(this);
-  }
-}
-
-abstract class _CattleNote implements CattleNote {
-  const factory _CattleNote({
-    required final String id,
-    required final String content,
-    required final DateTime timestamp,
-  }) = _$CattleNoteImpl;
-
-  factory _CattleNote.fromJson(Map<String, dynamic> json) =
-      _$CattleNoteImpl.fromJson;
-
-  @override
-  String get id;
-  @override
-  String get content;
-  @override
-  DateTime get timestamp;
-
-  /// Create a copy of CattleNote
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$CattleNoteImplCopyWith<_$CattleNoteImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

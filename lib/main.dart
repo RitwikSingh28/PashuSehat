@@ -6,6 +6,8 @@ import 'package:cattle_health/features/auth/bloc/auth_bloc.dart';
 import 'package:cattle_health/features/auth/repositories/auth_repository.dart';
 import 'package:cattle_health/features/auth/services/token_storage.dart';
 import 'package:cattle_health/routes/app_router.dart';
+import 'package:cattle_health/features/cattle/bloc/cattle_bloc.dart';
+import 'package:cattle_health/features/cattle/repositories/cattle_repository.dart';
 
 import 'features/auth/bloc/auth_event.dart';
 
@@ -28,6 +30,11 @@ class PashuSehatApp extends StatelessWidget {
             tokenStorage: context.read<AuthStorage>(),
           ),
         ),
+        RepositoryProvider(
+          create: (context) => CattleRepository(
+            tokenStorage: context.read<AuthStorage>(),
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -39,6 +46,9 @@ class PashuSehatApp extends StatelessWidget {
               authRepository: context.read<AuthRepository>(),
               tokenStorage: context.read<AuthStorage>(),
             )..add(const CheckAuthStatusEvent()),
+          ),
+          BlocProvider(
+            create: (context) => CattleBloc(cattleRepository: context.read<CattleRepository>()),
           ),
         ],
         child: BlocBuilder<ThemeCubit, ThemeState>(

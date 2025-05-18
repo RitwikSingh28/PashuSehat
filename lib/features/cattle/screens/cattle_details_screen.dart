@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:cattle_health/routes/route_names.dart';
@@ -6,6 +7,9 @@ import 'package:cattle_health/features/cattle/models/cattle_model.dart';
 import 'package:cattle_health/features/cattle/widgets/metrics_chart.dart';
 import 'package:cattle_health/core/widgets/time_range_selector.dart';
 import 'package:cattle_health/core/widgets/app_shell.dart';
+import 'package:cattle_health/features/cattle/bloc/cattle_bloc.dart';
+import 'package:cattle_health/features/cattle/bloc/cattle_event.dart';
+import 'package:cattle_health/features/cattle/bloc/cattle_state.dart';
 
 class CattleDetailsScreen extends StatefulWidget {
   final String id;
@@ -22,25 +26,13 @@ class CattleDetailsScreen extends StatefulWidget {
 class _CattleDetailsScreenState extends State<CattleDetailsScreen> {
   TimeRange _selectedRange = TimeRange.day;
 
-  // TODO: Replace with actual data from a repository
-  late final Cattle _mockCattle = Cattle(
-    id: widget.id,
-    name: 'Gauri',
-    tagId: 'TAG001',
-    dateOfBirth: DateTime.now().subtract(const Duration(days: 60)),
-    notes: [
-      CattleNote(
-        id: '1',
-        content: 'Vaccination done',
-        timestamp: DateTime.now().subtract(const Duration(days: 5)),
-      ),
-      CattleNote(
-        id: '2',
-        content: 'Regular checkup completed',
-        timestamp: DateTime.now().subtract(const Duration(days: 2)),
-      ),
-    ],
-  );
+  @override
+  void initState() {
+    super.initState();
+    context.read<CattleBloc>().add(
+          CattleEvent.loadSingleCattle(widget.id),
+        );
+  }
 
   // TODO: Replace with actual data
   List<FlSpot> _getMockData(MetricType type) {
@@ -80,6 +72,42 @@ class _CattleDetailsScreenState extends State<CattleDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return BlocConsumer<CattleBloc, CattleState>(
+      listener: (context, state) {
+        state.whenOrNull(
+          error: (error) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(error.message),
+                backgroundColor: Colors.red,
+              ),
+            );
+          },
+          updated: (cattle) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Note added successfully')),
+            );
+            context.read<CattleBloc>().add(
+                  CattleEvent.loadSingleCattle(widget.id),
+            );
+          },
+        );
+      },
+      builder: (context, state) {
+        return state.maybeWhen(
+          loading: () => const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          ),
+          singleLoaded: (cattle) => _buildContent(cattle),
+          orElse: () => const Scaffold(
+            body: Center(child: Text('Cattle not found')),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildContent(Cattle cattle) {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -98,15 +126,21 @@ class _CattleDetailsScreenState extends State<CattleDetailsScreen> {
         ),
         body: TabBarView(
           children: [
-            _buildGeneralTab(Theme.of(context)),
-            _buildNotesTab(Theme.of(context)),
+            _buildGeneralTab(Theme.of(context), cattle),
+            _buildNotesTab(Theme.of(context), cattle),
           ],
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
             context.push(
               RouteNames.getAddNotePath(widget.id),
-            ).then((added) => setState(() {})); // Refresh if note was added
+            ).then((added) {
+              if (added == true) {
+                context.read<CattleBloc>().add(
+                      CattleEvent.loadSingleCattle(widget.id),
+                    );
+              }
+            });
           },
           label: const Text('Add Note'),
           icon: const Icon(Icons.add),
@@ -115,7 +149,7 @@ class _CattleDetailsScreenState extends State<CattleDetailsScreen> {
     );
   }
 
-  Widget _buildGeneralTab(ThemeData theme) {
+  Widget _buildGeneralTab(ThemeData theme, Cattle cattle) {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,14 +167,23 @@ class _CattleDetailsScreenState extends State<CattleDetailsScreen> {
                     style: theme.textTheme.titleLarge,
                   ),
                   const SizedBox(height: 16),
-                  _buildInfoRow('Name', _mockCattle.name),
-                  _buildInfoRow('ID', _mockCattle.id),
-                  _buildInfoRow('Tag ID', _mockCattle.tagId),
-                  _buildInfoRow('Age Group', 'Calf'),
+                  _buildInfoRow('Name', cattle.name),
+                  _buildInfoRow('Tag ID', cattle.tagId),
+                  _buildInfoRow(
+                    'Age Group',
+                    cattle.ageGroup.toString().split('.').last.toUpperCase(),
+                  ),
+                  _buildInfoRow(
+                    'Gender',
+                    cattle.gender.toString().split('.').last.toUpperCase(),
+                  ),
                   _buildInfoRow(
                     'Date of Birth',
-                    _mockCattle.dateOfBirth.toString().split(' ')[0],
+                    cattle.dateOfBirth.toString().split(' ')[0],
                   ),
+                  _buildInfoRow('Breed', cattle.breed),
+                  if (cattle.governmentId != null)
+                    _buildInfoRow('Government ID', cattle.governmentId!),
                 ],
               ),
             ),
@@ -203,19 +246,22 @@ class _CattleDetailsScreenState extends State<CattleDetailsScreen> {
     );
   }
 
-  Widget _buildNotesTab(ThemeData theme) {
+  Widget _buildNotesTab(ThemeData theme, Cattle cattle) {
+    if (cattle.notes.isEmpty) {
+      return const Center(
+        child: Text('No notes added yet'),
+      );
+    }
+
     return ListView.builder(
       padding: const EdgeInsets.all(16),
-      itemCount: _mockCattle.notes.length,
+      itemCount: cattle.notes.length,
       itemBuilder: (context, index) {
-        final note = _mockCattle.notes[index];
+        final note = cattle.notes[index];
         return Card(
           child: ListTile(
-            title: Text(note.content),
-            subtitle: Text(
-              note.timestamp.toString().split('.')[0],
-              style: theme.textTheme.bodySmall,
-            ),
+            title: Text(note),
+            dense: true,
           ),
         );
       },
@@ -262,8 +308,15 @@ class _CattleDetailsScreenState extends State<CattleDetailsScreen> {
           ),
           FilledButton(
             onPressed: () {
-              // TODO: Implement note adding
-              Navigator.pop(context);
+              if (noteController.text.isNotEmpty) {
+                context.read<CattleBloc>().add(
+                      CattleEvent.addNote(
+                        cattleId: widget.id,
+                        note: noteController.text,
+                      ),
+                    );
+                Navigator.pop(context);
+              }
             },
             child: const Text('Add'),
           ),
