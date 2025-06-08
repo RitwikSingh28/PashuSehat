@@ -3,6 +3,19 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'alert_model.freezed.dart';
 part 'alert_model.g.dart';
 
+@freezed
+class TelemetryData with _$TelemetryData {
+  const factory TelemetryData({
+    required int timestamp,
+    required double temperature,
+    required double pulseRate,
+    @JsonKey(name: 'motionData') required double motion,
+    @JsonKey(name: 'batteryLevel') required double battery,
+  }) = _TelemetryData;
+
+  factory TelemetryData.fromJson(Map<String, dynamic> json) => _$TelemetryDataFromJson(json);
+}
+
 enum AlertType {
   @JsonValue('temperature')
   temperature,
@@ -57,6 +70,7 @@ class Alert with _$Alert {
     required AlertThreshold threshold,
     @JsonKey(name: 'status') @Default(AlertStatus.new_) AlertStatus status,
     String? acknowledgedBy,
+    @Default([]) @JsonKey(defaultValue: []) List<TelemetryData> recentTelemetry,
     @JsonKey(fromJson: _nullableTimestampFromJson) DateTime? acknowledgedAt,
   }) = _Alert;
 

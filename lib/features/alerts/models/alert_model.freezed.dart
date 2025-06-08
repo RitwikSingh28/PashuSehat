@@ -15,6 +15,275 @@ final _privateConstructorUsedError = UnsupportedError(
   'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
 );
 
+TelemetryData _$TelemetryDataFromJson(Map<String, dynamic> json) {
+  return _TelemetryData.fromJson(json);
+}
+
+/// @nodoc
+mixin _$TelemetryData {
+  int get timestamp => throw _privateConstructorUsedError;
+  double get temperature => throw _privateConstructorUsedError;
+  double get pulseRate => throw _privateConstructorUsedError;
+  @JsonKey(name: 'motionData')
+  double get motion => throw _privateConstructorUsedError;
+  @JsonKey(name: 'batteryLevel')
+  double get battery => throw _privateConstructorUsedError;
+
+  /// Serializes this TelemetryData to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of TelemetryData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $TelemetryDataCopyWith<TelemetryData> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TelemetryDataCopyWith<$Res> {
+  factory $TelemetryDataCopyWith(
+    TelemetryData value,
+    $Res Function(TelemetryData) then,
+  ) = _$TelemetryDataCopyWithImpl<$Res, TelemetryData>;
+  @useResult
+  $Res call({
+    int timestamp,
+    double temperature,
+    double pulseRate,
+    @JsonKey(name: 'motionData') double motion,
+    @JsonKey(name: 'batteryLevel') double battery,
+  });
+}
+
+/// @nodoc
+class _$TelemetryDataCopyWithImpl<$Res, $Val extends TelemetryData>
+    implements $TelemetryDataCopyWith<$Res> {
+  _$TelemetryDataCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of TelemetryData
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? timestamp = null,
+    Object? temperature = null,
+    Object? pulseRate = null,
+    Object? motion = null,
+    Object? battery = null,
+  }) {
+    return _then(
+      _value.copyWith(
+            timestamp:
+                null == timestamp
+                    ? _value.timestamp
+                    : timestamp // ignore: cast_nullable_to_non_nullable
+                        as int,
+            temperature:
+                null == temperature
+                    ? _value.temperature
+                    : temperature // ignore: cast_nullable_to_non_nullable
+                        as double,
+            pulseRate:
+                null == pulseRate
+                    ? _value.pulseRate
+                    : pulseRate // ignore: cast_nullable_to_non_nullable
+                        as double,
+            motion:
+                null == motion
+                    ? _value.motion
+                    : motion // ignore: cast_nullable_to_non_nullable
+                        as double,
+            battery:
+                null == battery
+                    ? _value.battery
+                    : battery // ignore: cast_nullable_to_non_nullable
+                        as double,
+          )
+          as $Val,
+    );
+  }
+}
+
+/// @nodoc
+abstract class _$$TelemetryDataImplCopyWith<$Res>
+    implements $TelemetryDataCopyWith<$Res> {
+  factory _$$TelemetryDataImplCopyWith(
+    _$TelemetryDataImpl value,
+    $Res Function(_$TelemetryDataImpl) then,
+  ) = __$$TelemetryDataImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({
+    int timestamp,
+    double temperature,
+    double pulseRate,
+    @JsonKey(name: 'motionData') double motion,
+    @JsonKey(name: 'batteryLevel') double battery,
+  });
+}
+
+/// @nodoc
+class __$$TelemetryDataImplCopyWithImpl<$Res>
+    extends _$TelemetryDataCopyWithImpl<$Res, _$TelemetryDataImpl>
+    implements _$$TelemetryDataImplCopyWith<$Res> {
+  __$$TelemetryDataImplCopyWithImpl(
+    _$TelemetryDataImpl _value,
+    $Res Function(_$TelemetryDataImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of TelemetryData
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? timestamp = null,
+    Object? temperature = null,
+    Object? pulseRate = null,
+    Object? motion = null,
+    Object? battery = null,
+  }) {
+    return _then(
+      _$TelemetryDataImpl(
+        timestamp:
+            null == timestamp
+                ? _value.timestamp
+                : timestamp // ignore: cast_nullable_to_non_nullable
+                    as int,
+        temperature:
+            null == temperature
+                ? _value.temperature
+                : temperature // ignore: cast_nullable_to_non_nullable
+                    as double,
+        pulseRate:
+            null == pulseRate
+                ? _value.pulseRate
+                : pulseRate // ignore: cast_nullable_to_non_nullable
+                    as double,
+        motion:
+            null == motion
+                ? _value.motion
+                : motion // ignore: cast_nullable_to_non_nullable
+                    as double,
+        battery:
+            null == battery
+                ? _value.battery
+                : battery // ignore: cast_nullable_to_non_nullable
+                    as double,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$TelemetryDataImpl implements _TelemetryData {
+  const _$TelemetryDataImpl({
+    required this.timestamp,
+    required this.temperature,
+    required this.pulseRate,
+    @JsonKey(name: 'motionData') required this.motion,
+    @JsonKey(name: 'batteryLevel') required this.battery,
+  });
+
+  factory _$TelemetryDataImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TelemetryDataImplFromJson(json);
+
+  @override
+  final int timestamp;
+  @override
+  final double temperature;
+  @override
+  final double pulseRate;
+  @override
+  @JsonKey(name: 'motionData')
+  final double motion;
+  @override
+  @JsonKey(name: 'batteryLevel')
+  final double battery;
+
+  @override
+  String toString() {
+    return 'TelemetryData(timestamp: $timestamp, temperature: $temperature, pulseRate: $pulseRate, motion: $motion, battery: $battery)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$TelemetryDataImpl &&
+            (identical(other.timestamp, timestamp) ||
+                other.timestamp == timestamp) &&
+            (identical(other.temperature, temperature) ||
+                other.temperature == temperature) &&
+            (identical(other.pulseRate, pulseRate) ||
+                other.pulseRate == pulseRate) &&
+            (identical(other.motion, motion) || other.motion == motion) &&
+            (identical(other.battery, battery) || other.battery == battery));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+    runtimeType,
+    timestamp,
+    temperature,
+    pulseRate,
+    motion,
+    battery,
+  );
+
+  /// Create a copy of TelemetryData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TelemetryDataImplCopyWith<_$TelemetryDataImpl> get copyWith =>
+      __$$TelemetryDataImplCopyWithImpl<_$TelemetryDataImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$TelemetryDataImplToJson(this);
+  }
+}
+
+abstract class _TelemetryData implements TelemetryData {
+  const factory _TelemetryData({
+    required final int timestamp,
+    required final double temperature,
+    required final double pulseRate,
+    @JsonKey(name: 'motionData') required final double motion,
+    @JsonKey(name: 'batteryLevel') required final double battery,
+  }) = _$TelemetryDataImpl;
+
+  factory _TelemetryData.fromJson(Map<String, dynamic> json) =
+      _$TelemetryDataImpl.fromJson;
+
+  @override
+  int get timestamp;
+  @override
+  double get temperature;
+  @override
+  double get pulseRate;
+  @override
+  @JsonKey(name: 'motionData')
+  double get motion;
+  @override
+  @JsonKey(name: 'batteryLevel')
+  double get battery;
+
+  /// Create a copy of TelemetryData
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$TelemetryDataImplCopyWith<_$TelemetryDataImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 AlertThreshold _$AlertThresholdFromJson(Map<String, dynamic> json) {
   return _AlertThreshold.fromJson(json);
 }
@@ -211,6 +480,8 @@ mixin _$Alert {
   @JsonKey(name: 'status')
   AlertStatus get status => throw _privateConstructorUsedError;
   String? get acknowledgedBy => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: [])
+  List<TelemetryData> get recentTelemetry => throw _privateConstructorUsedError;
   @JsonKey(fromJson: _nullableTimestampFromJson)
   DateTime? get acknowledgedAt => throw _privateConstructorUsedError;
 
@@ -241,6 +512,7 @@ abstract class $AlertCopyWith<$Res> {
     AlertThreshold threshold,
     @JsonKey(name: 'status') AlertStatus status,
     String? acknowledgedBy,
+    @JsonKey(defaultValue: []) List<TelemetryData> recentTelemetry,
     @JsonKey(fromJson: _nullableTimestampFromJson) DateTime? acknowledgedAt,
   });
 
@@ -274,6 +546,7 @@ class _$AlertCopyWithImpl<$Res, $Val extends Alert>
     Object? threshold = null,
     Object? status = null,
     Object? acknowledgedBy = freezed,
+    Object? recentTelemetry = null,
     Object? acknowledgedAt = freezed,
   }) {
     return _then(
@@ -338,6 +611,11 @@ class _$AlertCopyWithImpl<$Res, $Val extends Alert>
                     ? _value.acknowledgedBy
                     : acknowledgedBy // ignore: cast_nullable_to_non_nullable
                         as String?,
+            recentTelemetry:
+                null == recentTelemetry
+                    ? _value.recentTelemetry
+                    : recentTelemetry // ignore: cast_nullable_to_non_nullable
+                        as List<TelemetryData>,
             acknowledgedAt:
                 freezed == acknowledgedAt
                     ? _value.acknowledgedAt
@@ -380,6 +658,7 @@ abstract class _$$AlertImplCopyWith<$Res> implements $AlertCopyWith<$Res> {
     AlertThreshold threshold,
     @JsonKey(name: 'status') AlertStatus status,
     String? acknowledgedBy,
+    @JsonKey(defaultValue: []) List<TelemetryData> recentTelemetry,
     @JsonKey(fromJson: _nullableTimestampFromJson) DateTime? acknowledgedAt,
   });
 
@@ -413,6 +692,7 @@ class __$$AlertImplCopyWithImpl<$Res>
     Object? threshold = null,
     Object? status = null,
     Object? acknowledgedBy = freezed,
+    Object? recentTelemetry = null,
     Object? acknowledgedAt = freezed,
   }) {
     return _then(
@@ -477,6 +757,11 @@ class __$$AlertImplCopyWithImpl<$Res>
                 ? _value.acknowledgedBy
                 : acknowledgedBy // ignore: cast_nullable_to_non_nullable
                     as String?,
+        recentTelemetry:
+            null == recentTelemetry
+                ? _value._recentTelemetry
+                : recentTelemetry // ignore: cast_nullable_to_non_nullable
+                    as List<TelemetryData>,
         acknowledgedAt:
             freezed == acknowledgedAt
                 ? _value.acknowledgedAt
@@ -503,8 +788,10 @@ class _$AlertImpl implements _Alert {
     required this.threshold,
     @JsonKey(name: 'status') this.status = AlertStatus.new_,
     this.acknowledgedBy,
+    @JsonKey(defaultValue: [])
+    final List<TelemetryData> recentTelemetry = const [],
     @JsonKey(fromJson: _nullableTimestampFromJson) this.acknowledgedAt,
-  });
+  }) : _recentTelemetry = recentTelemetry;
 
   factory _$AlertImpl.fromJson(Map<String, dynamic> json) =>
       _$$AlertImplFromJson(json);
@@ -536,13 +823,22 @@ class _$AlertImpl implements _Alert {
   final AlertStatus status;
   @override
   final String? acknowledgedBy;
+  final List<TelemetryData> _recentTelemetry;
+  @override
+  @JsonKey(defaultValue: [])
+  List<TelemetryData> get recentTelemetry {
+    if (_recentTelemetry is EqualUnmodifiableListView) return _recentTelemetry;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_recentTelemetry);
+  }
+
   @override
   @JsonKey(fromJson: _nullableTimestampFromJson)
   final DateTime? acknowledgedAt;
 
   @override
   String toString() {
-    return 'Alert(id: $id, userId: $userId, cattleId: $cattleId, cattleName: $cattleName, tagId: $tagId, timestamp: $timestamp, type: $type, severity: $severity, value: $value, threshold: $threshold, status: $status, acknowledgedBy: $acknowledgedBy, acknowledgedAt: $acknowledgedAt)';
+    return 'Alert(id: $id, userId: $userId, cattleId: $cattleId, cattleName: $cattleName, tagId: $tagId, timestamp: $timestamp, type: $type, severity: $severity, value: $value, threshold: $threshold, status: $status, acknowledgedBy: $acknowledgedBy, recentTelemetry: $recentTelemetry, acknowledgedAt: $acknowledgedAt)';
   }
 
   @override
@@ -568,6 +864,10 @@ class _$AlertImpl implements _Alert {
             (identical(other.status, status) || other.status == status) &&
             (identical(other.acknowledgedBy, acknowledgedBy) ||
                 other.acknowledgedBy == acknowledgedBy) &&
+            const DeepCollectionEquality().equals(
+              other._recentTelemetry,
+              _recentTelemetry,
+            ) &&
             (identical(other.acknowledgedAt, acknowledgedAt) ||
                 other.acknowledgedAt == acknowledgedAt));
   }
@@ -588,6 +888,7 @@ class _$AlertImpl implements _Alert {
     threshold,
     status,
     acknowledgedBy,
+    const DeepCollectionEquality().hash(_recentTelemetry),
     acknowledgedAt,
   );
 
@@ -619,6 +920,7 @@ abstract class _Alert implements Alert {
     required final AlertThreshold threshold,
     @JsonKey(name: 'status') final AlertStatus status,
     final String? acknowledgedBy,
+    @JsonKey(defaultValue: []) final List<TelemetryData> recentTelemetry,
     @JsonKey(fromJson: _nullableTimestampFromJson)
     final DateTime? acknowledgedAt,
   }) = _$AlertImpl;
@@ -652,6 +954,9 @@ abstract class _Alert implements Alert {
   AlertStatus get status;
   @override
   String? get acknowledgedBy;
+  @override
+  @JsonKey(defaultValue: [])
+  List<TelemetryData> get recentTelemetry;
   @override
   @JsonKey(fromJson: _nullableTimestampFromJson)
   DateTime? get acknowledgedAt;

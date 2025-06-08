@@ -55,6 +55,22 @@ class AlertCard extends StatelessWidget {
     }
   }
 
+  Color _getAlertColor(ThemeData theme) {
+    if (alert.status == AlertStatus.acknowledged) {
+      return theme.colorScheme.surfaceVariant;
+    }
+
+    // For unacknowledged alerts, color based on severity
+    switch (alert.severity) {
+      case AlertSeverity.high:
+        return Color(0xFFFDE8E8);  // Light red background
+      case AlertSeverity.medium:
+        return Color(0xFFFEF3C7);  // Light amber background
+      case AlertSeverity.low:
+        return Color(0xFFE8F4FF);  // Light blue background
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -62,9 +78,7 @@ class AlertCard extends StatelessWidget {
     return Card(
       elevation: alert.status == AlertStatus.new_ ? 2 : 1,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      color: alert.status == AlertStatus.new_
-          ? theme.colorScheme.surface
-          : theme.colorScheme.surfaceVariant.withOpacity(0.5),
+      color: _getAlertColor(theme),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -73,7 +87,12 @@ class AlertCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(_getAlertIcon(), color: theme.primaryColor),
+                Icon(
+                  _getAlertIcon(),
+                  color: alert.severity == AlertSeverity.high
+                      ? Color(0xFFDC2626)  // Red for high severity
+                      : theme.primaryColor,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Column(
@@ -81,7 +100,11 @@ class AlertCard extends StatelessWidget {
                     children: [
                       Text(
                         alert.cattleName ?? 'Unknown',
-                        style: theme.textTheme.titleMedium,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: alert.severity == AlertSeverity.high
+                              ? Color(0xFFDC2626)  // Red for high severity
+                              : null,
+                        ),
                       ),
                       Text(
                         'ID: ${alert.tagId}',

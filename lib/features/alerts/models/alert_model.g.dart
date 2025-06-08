@@ -6,6 +6,24 @@ part of 'alert_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+_$TelemetryDataImpl _$$TelemetryDataImplFromJson(Map<String, dynamic> json) =>
+    _$TelemetryDataImpl(
+      timestamp: (json['timestamp'] as num).toInt(),
+      temperature: (json['temperature'] as num).toDouble(),
+      pulseRate: (json['pulseRate'] as num).toDouble(),
+      motion: (json['motionData'] as num).toDouble(),
+      battery: (json['batteryLevel'] as num).toDouble(),
+    );
+
+Map<String, dynamic> _$$TelemetryDataImplToJson(_$TelemetryDataImpl instance) =>
+    <String, dynamic>{
+      'timestamp': instance.timestamp,
+      'temperature': instance.temperature,
+      'pulseRate': instance.pulseRate,
+      'motionData': instance.motion,
+      'batteryLevel': instance.battery,
+    };
+
 _$AlertThresholdImpl _$$AlertThresholdImplFromJson(Map<String, dynamic> json) =>
     _$AlertThresholdImpl(
       min: (json['min'] as num?)?.toDouble(),
@@ -31,6 +49,11 @@ _$AlertImpl _$$AlertImplFromJson(Map<String, dynamic> json) => _$AlertImpl(
       $enumDecodeNullable(_$AlertStatusEnumMap, json['status']) ??
       AlertStatus.new_,
   acknowledgedBy: json['acknowledgedBy'] as String?,
+  recentTelemetry:
+      (json['recentTelemetry'] as List<dynamic>?)
+          ?.map((e) => TelemetryData.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      [],
   acknowledgedAt: _nullableTimestampFromJson(json['acknowledgedAt']),
 );
 
@@ -48,6 +71,7 @@ Map<String, dynamic> _$$AlertImplToJson(_$AlertImpl instance) =>
       'threshold': instance.threshold,
       'status': _$AlertStatusEnumMap[instance.status]!,
       'acknowledgedBy': instance.acknowledgedBy,
+      'recentTelemetry': instance.recentTelemetry,
       'acknowledgedAt': instance.acknowledgedAt?.toIso8601String(),
     };
 

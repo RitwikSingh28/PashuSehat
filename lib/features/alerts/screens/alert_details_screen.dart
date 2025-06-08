@@ -4,6 +4,7 @@ import 'package:cattle_health/features/alerts/bloc/alert_bloc.dart';
 import 'package:cattle_health/features/alerts/bloc/alert_event.dart';
 import 'package:cattle_health/features/alerts/bloc/alert_state.dart';
 import 'package:cattle_health/features/alerts/models/alert_model.dart';
+import 'package:cattle_health/features/alerts/widgets/alert_history_chart.dart';
 import 'package:intl/intl.dart';
 
 class AlertDetailsScreen extends StatefulWidget {
@@ -158,18 +159,6 @@ class _AlertDetailsScreenState extends State<AlertDetailsScreen> {
                                   _formatTimestamp(widget.alert.timestamp),
                                   style: theme.textTheme.bodyMedium,
                                 ),
-                                if (widget.alert.status == AlertStatus.acknowledged) ...[
-                                  const SizedBox(height: 16),
-                                  Text(
-                                    'Acknowledged by: ${widget.alert.acknowledgedBy}',
-                                    style: theme.textTheme.bodyMedium,
-                                  ),
-                                  if (widget.alert.acknowledgedAt != null)
-                                    Text(
-                                      'Acknowledged at: ${_formatTimestamp(widget.alert.acknowledgedAt!)}',
-                                      style: theme.textTheme.bodyMedium,
-                                    ),
-                                ],
                               ],
                             ),
                           ),
@@ -190,15 +179,7 @@ class _AlertDetailsScreenState extends State<AlertDetailsScreen> {
                           style: theme.textTheme.titleMedium,
                         ),
                         const SizedBox(height: 16),
-                        SizedBox(
-                          height: 200,
-                          child: Center(
-                            child: Text(
-                              'Chart will be displayed here',
-                              style: theme.textTheme.bodyMedium,
-                            ),
-                          ),
-                        ),
+                        AlertHistoryChart(alert: widget.alert),
                       ],
                     ),
                   ),
