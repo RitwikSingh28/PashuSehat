@@ -84,7 +84,14 @@ class AppRouter {
           // Dashboard tab
           GoRoute(
             path: RouteNames.dashboard,
-            builder: (context, state) => const DashboardScreen(),
+            builder: (context, state) => BlocProvider(
+              create: (context) => AlertBloc(
+                alertRepository: AlertRepository(
+                  tokenStorage: context.read<AuthStorage>(),
+                ),
+              ),
+              child: const DashboardScreen(),
+            ),
           ),
 
           // Alerts tab and details
@@ -103,22 +110,7 @@ class AppRouter {
                 path: ':id',
                 builder: (context, state) {
                   final id = state.pathParameters['id']!;
-                  return BlocProvider(
-                    create: (context) => AlertBloc(
-                      alertRepository: AlertRepository(
-                        tokenStorage: context.read<AuthStorage>(),
-                      ),
-                    ),
-                    child: Builder(
-                      builder: (context) {
-                        final alert = state.extra as Alert?;
-                        if (alert == null) {
-                          return const Center(child: Text('Alert not found'));
-                        }
-                        return AlertDetailsScreen(alert: alert);
-                      },
-                    ),
-                  );
+                  return AlertDetailsScreen(alert: state.extra as Alert);
                 },
               ),
             ],

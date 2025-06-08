@@ -120,7 +120,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               final alert = alerts[index];
                               return InkWell(
                                 onTap: () {
-                                  context.go(RouteNames.getAlertDetailsPath(alert.id));
+                                  context.go(
+                                    RouteNames.getAlertDetailsPath(alert.id),
+                                    extra: alert);
                                 },
                                 child: AlertCard(alert: alert),
                               );
