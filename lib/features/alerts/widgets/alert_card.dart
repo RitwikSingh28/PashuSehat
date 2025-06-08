@@ -13,7 +13,7 @@ class AlertCard extends StatelessWidget {
   String _getAlertMessage() {
     switch (alert.type) {
       case AlertType.temperature:
-        return 'Temperature: ${alert.value.toStringAsFixed(1)}°C';
+        return 'Temperature: ${alert.value.toStringAsFixed(1)}°F';
       case AlertType.pulseRate:
         return 'Pulse Rate: ${alert.value.toStringAsFixed(0)} BPM';
       case AlertType.motion:
@@ -42,16 +42,16 @@ class AlertCard extends StatelessWidget {
 
     if (difference.inDays == 0) {
       // Today: Show time only
-      return 'Today ${DateFormat.jm().format(alert.timestamp)}';
+      return 'Today ${DateFormat('h:mm a').format(alert.timestamp)}';
     } else if (difference.inDays == 1) {
       // Yesterday: Show "Yesterday" and time
-      return 'Yesterday ${DateFormat.jm().format(alert.timestamp)}';
+      return 'Yesterday ${DateFormat('h:mm a').format(alert.timestamp)}';
     } else if (difference.inDays < 7) {
       // Within a week: Show day name and time
-      return DateFormat('EEEE, jm').format(alert.timestamp);
+      return DateFormat('E, h:mm a').format(alert.timestamp);
     } else {
       // Older: Show full date and time
-      return DateFormat('MMM d, y, jm').format(alert.timestamp);
+      return DateFormat('MMM d, h:mm a').format(alert.timestamp);
     }
   }
 
@@ -69,6 +69,7 @@ class AlertCard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               children: [
@@ -89,16 +90,6 @@ class AlertCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                Text(
-                  _formatTimestamp(),
-                  style: theme.textTheme.bodySmall,
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
                 Text(
                   _formatTimestamp(),
                   style: theme.textTheme.bodySmall,

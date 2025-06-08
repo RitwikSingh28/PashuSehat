@@ -20,19 +20,46 @@ class AlertDetailsScreen extends StatefulWidget {
 
 class _AlertDetailsScreenState extends State<AlertDetailsScreen> {
   String _formatTimestamp(DateTime timestamp) {
-    return DateFormat('MMM d, y, h:mm a').format(timestamp);
+    final now = DateTime.now();
+    final difference = now.difference(timestamp);
+
+    if (difference.inDays == 0) {
+      // Today: Show time only
+      return DateFormat('h:mm a').format(timestamp);
+    } else if (difference.inDays == 1) {
+      // Yesterday: Show "Yesterday" and time
+      return 'Yesterday ${DateFormat('h:mm a').format(timestamp)}';
+    } else if (difference.inDays < 7) {
+      // Within a week: Show day name and time
+      return DateFormat('E, h:mm a').format(timestamp);
+    }
+    // Older: Show date and time
+    return DateFormat('MMM d, h:mm a').format(timestamp);
   }
 
   String _getUnit() {
     switch (widget.alert.type) {
       case AlertType.temperature:
-        return '°C';
+        return '°F';
       case AlertType.pulseRate:
         return 'BPM';
       case AlertType.motion:
         return 'Motion';
       case AlertType.battery:
         return '%';
+    }
+  }
+
+  String _getReadingTitle() {
+    switch (widget.alert.type) {
+      case AlertType.temperature:
+        return 'Temperature';
+      case AlertType.pulseRate:
+        return 'Pulse Rate';
+      case AlertType.motion:
+        return 'Motion';
+      case AlertType.battery:
+        return 'Battery';
     }
   }
 
@@ -85,74 +112,73 @@ class _AlertDetailsScreenState extends State<AlertDetailsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Cattle Information',
-                          style: theme.textTheme.titleMedium,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          widget.alert.cattleName ?? 'Unknown',
-                          style: theme.textTheme.bodyLarge,
-                        ),
-                        Text(
-                          'Tag ID: ${widget.alert.tagId}',
-                          style: theme.textTheme.bodyMedium,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Alert Details',
-                          style: theme.textTheme.titleMedium,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Value: ${widget.alert.value} ${_getUnit()}',
-                          style: theme.textTheme.bodyLarge,
-                        ),
-                        Text(
-                          'Time: ${_formatTimestamp(widget.alert.timestamp)}',
-                          style: theme.textTheme.bodyMedium,
-                        ),
-                        if (widget.alert.threshold != null) ...[
-                          const SizedBox(height: 8),
-                          Text(
-                            'Threshold: ${widget.alert.threshold?.min ?? '-'} - ${widget.alert.threshold?.max ?? '-'} ${_getUnit()}',
-                            style: theme.textTheme.bodyMedium,
-                          ),
-                        ],
-                        if (widget.alert.status == AlertStatus.acknowledged) ...[
-                          const SizedBox(height: 16),
-                          Text(
-                            'Acknowledged by: ${widget.alert.acknowledgedBy}',
-                            style: theme.textTheme.bodyMedium,
-                          ),
-                          if (widget.alert.acknowledgedAt != null)
-                            Text(
-                              'Acknowledged at: ${_formatTimestamp(widget.alert.acknowledgedAt!)}',
-                              style: theme.textTheme.bodyMedium,
+                IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Cattle',
+                                  style: theme.textTheme.titleMedium,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  widget.alert.cattleName ?? 'Unknown',
+                                  style: theme.textTheme.bodyLarge,
+                                ),
+                              ],
                             ),
-                        ],
-                      ],
-                    ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _getReadingTitle(),
+                                  style: theme.textTheme.titleMedium,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  '${widget.alert.value.toStringAsFixed(1)} ${_getUnit()}',
+                                  style: theme.textTheme.bodyLarge,
+                                ),
+                                Text(
+                                  _formatTimestamp(widget.alert.timestamp),
+                                  style: theme.textTheme.bodyMedium,
+                                ),
+                                if (widget.alert.status == AlertStatus.acknowledged) ...[
+                                  const SizedBox(height: 16),
+                                  Text(
+                                    'Acknowledged by: ${widget.alert.acknowledgedBy}',
+                                    style: theme.textTheme.bodyMedium,
+                                  ),
+                                  if (widget.alert.acknowledgedAt != null)
+                                    Text(
+                                      'Acknowledged at: ${_formatTimestamp(widget.alert.acknowledgedAt!)}',
+                                      style: theme.textTheme.bodyMedium,
+                                    ),
+                                ],
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 16),
-                // TODO: Add chart widget here
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.all(16),
