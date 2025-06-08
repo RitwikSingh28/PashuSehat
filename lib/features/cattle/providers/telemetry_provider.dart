@@ -8,6 +8,7 @@ import 'package:cattle_health/features/cattle/models/telemetry_data.dart';
 class TelemetryProvider extends ChangeNotifier {
   final SocketService _socketService = SocketService();
   TelemetryData? _latestTelemetry;
+  final List<TelemetryData> _telemetryHistory = [];
   StreamSubscription? _telemetrySubscription;
   String? _error;
   String? _currentCattleId;
@@ -15,6 +16,7 @@ class TelemetryProvider extends ChangeNotifier {
   SocketConnectionState _connectionState = SocketConnectionState.disconnected;
 
   TelemetryData? get latestTelemetry => _latestTelemetry;
+  List<TelemetryData> get telemetryHistory => _telemetryHistory;
   String? get error => _error;
   SocketConnectionState get connectionState => _connectionState;
 
@@ -32,13 +34,20 @@ class TelemetryProvider extends ChangeNotifier {
       try {
         print('TelemetryProvider: Starting monitoring for cattle $cattleId');
         _telemetrySubscription = _socketService
-            .subscribeToCattle(cattleId, userId)
+            .subscribeToCattle(cattleId, userId,
+              onConnectionStateChange: (state) {
+                _connectionState = state;
+                notifyListeners();
+              })
             .listen(
               (data) {
                 print('TelemetryProvider: Received data: $data');
-                print('DEBUG: Attempting to parse data to TelemetryData');
                 _latestTelemetry = TelemetryData.fromJson(data);
-                _error = null;
+                // Keep last 60 readings (1 hour of data at 1-minute intervals)
+                _telemetryHistory.add(_latestTelemetry!);
+                if (_telemetryHistory.length > 60) {
+                  _telemetryHistory.removeAt(0);
+                }
                 _connectionState = SocketConnectionState.connected;
                 notifyListeners();
               },
@@ -66,6 +75,7 @@ class TelemetryProvider extends ChangeNotifier {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       _latestTelemetry = null;
       _error = null;
+      _telemetryHistory.clear();
       _connectionState = SocketConnectionState.disconnected;
       _currentCattleId = null;
       _currentUserId = null;

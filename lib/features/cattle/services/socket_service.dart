@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:cattle_health/features/cattle/models/socket_connection_state.dart';
 
 class SocketService {
   static final SocketService _instance = SocketService._internal();
@@ -56,7 +57,11 @@ class SocketService {
       });
   }
 
-  Stream<Map<String, dynamic>> subscribeToCattle(String cattleId, String userId) {
+  Stream<Map<String, dynamic>> subscribeToCattle(
+    String cattleId,
+    String userId, {
+    required void Function(SocketConnectionState) onConnectionStateChange,
+  }) {
     print('Subscribing to cattle: $cattleId for user: $userId');
 
     if (_telemetryControllers.containsKey(cattleId)) {
@@ -66,14 +71,32 @@ class SocketService {
     final controller = StreamController<Map<String, dynamic>>.broadcast();
     _telemetryControllers[cattleId] = controller;
 
+    // Update connection state handlers
+    _socket
+      ?..onConnect((_) {
+        print('Socket connected, updating state');
+        onConnectionStateChange(SocketConnectionState.connected);
+      })
+      ..onDisconnect((_) {
+        print('Socket disconnected, updating state');
+        onConnectionStateChange(SocketConnectionState.disconnected);
+      })
+      ..onConnectError((error) {
+        print('Socket connection error, updating state');
+        onConnectionStateChange(SocketConnectionState.error);
+      })
+      ..onError((error) {
+        print('Socket error, updating state');
+        onConnectionStateChange(SocketConnectionState.error);
+      });
+
     // Set up the telemetry listener
     _socket?.on('telemetry-update', (data) {
       print('DEBUG: Raw telemetry data received: $data');
-      if (data is Map<String, dynamic> && data['cattleId'] == cattleId) {
+      if (data is Map<String, dynamic> && data['tagId'] != null) {
         print('Received telemetry data for $cattleId: $data');
-        print('DEBUG: About to add data to controller');
         controller.add(data);
-        print('DEBUG: Data added to controller');
+        onConnectionStateChange(SocketConnectionState.connected);
       }
     });
 
@@ -94,8 +117,10 @@ class SocketService {
         'cattleId': cattleId,
         'userId': userId,
       });
+      onConnectionStateChange(SocketConnectionState.connected);
     } else {
       print('Socket not connected, will subscribe when connection is established');
+      onConnectionStateChange(SocketConnectionState.connecting);
       // Make sure socket is connecting
       _socket?.connect();
     }

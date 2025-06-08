@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:cattle_health/features/cattle/providers/telemetry_provider.dart';
 import 'package:cattle_health/features/auth/bloc/auth_bloc.dart';
 import 'package:cattle_health/features/auth/bloc/auth_state.dart';
-import 'package:cattle_health/features/cattle/widgets/metrics_chart.dart';
+import 'package:cattle_health/features/cattle/models/cattle_state.dart';
 import 'package:cattle_health/features/cattle/services/socket_service.dart';
 
 class LiveTelemetryScreen extends StatefulWidget {
@@ -134,14 +134,40 @@ class _LiveTelemetryScreenState extends State<LiveTelemetryScreen> {
     );
   }
 
-  List<FlSpot> _getTemperatureData(TelemetryData? telemetry) {
+  List<FlSpot> _getTemperatureData(TelemetryData? telemetry, List<TelemetryData> history) {
     if (telemetry == null) return [];
-    return [FlSpot(0, telemetry.temperature)];
+
+    // Combine history and current telemetry
+    final allData = [...history, telemetry];
+
+    // Create spots with most recent data at the highest x value
+    final spots = List<FlSpot>.generate(
+      allData.length,
+      (index) => FlSpot(
+        index.toDouble(),
+        allData[index].temperature,
+      ),
+    );
+
+    return spots;
   }
 
-  List<FlSpot> _getHeartRateData(TelemetryData? telemetry) {
+  List<FlSpot> _getHeartRateData(TelemetryData? telemetry, List<TelemetryData> history) {
     if (telemetry == null) return [];
-    return [FlSpot(0, telemetry.heartRate.toDouble())];
+
+    // Combine history and current telemetry
+    final allData = [...history, telemetry];
+
+    // Create spots with most recent data at the highest x value
+    final spots = List<FlSpot>.generate(
+      allData.length,
+      (index) => FlSpot(
+        index.toDouble(),
+        allData[index].heartRate.toDouble(),
+      ),
+    );
+
+    return spots;
   }
 
   String _formatTimestamp(int timestamp) {
@@ -223,7 +249,7 @@ class _LiveTelemetryScreenState extends State<LiveTelemetryScreen> {
                         _buildConnectionStatus(provider.connectionState),
                         const SizedBox(width: 12),
                         Text(
-                          'Updates every 5 seconds',
+                          'Updates every 1 minute',
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ],
@@ -246,11 +272,19 @@ class _LiveTelemetryScreenState extends State<LiveTelemetryScreen> {
                       '${telemetry.motionData.toStringAsFixed(2)} g',
                       Icons.moving,
                     ),
+                    // _buildInfoCard(
                     _buildInfoCard(
-                      'Last Update',
-                      _formatTimestamp(telemetry.timestamp),
-                      Icons.access_time,
+                      'Current State',
+                      CattleState.fromMotionData(telemetry.motionData).displayName,
+                      CattleState.fromMotionData(telemetry.motionData).icon,
+                      iconColor: CattleState.fromMotionData(telemetry.motionData).color,
                     ),
+                    const SizedBox(height: 16),
+                    // _buildInfoCard(
+                    //   'Last Update',
+                    //   _formatTimestamp(telemetry.timestamp),
+                    //   Icons.access_time,
+                    // ),
                   ],
                   if (provider.connectionState == SocketConnectionState.connected) ...[
                     Card(
@@ -267,13 +301,13 @@ class _LiveTelemetryScreenState extends State<LiveTelemetryScreen> {
                                   const Icon(Icons.thermostat),
                                   const SizedBox(width: 8),
                                   Text(
-                                    'Temperature (°C)',
+                                    'Temperature (°F)',
                                     style: Theme.of(context).textTheme.titleMedium,
                                   ),
                                   const Spacer(),
                                   if (telemetry != null)
                                     Text(
-                                      '${telemetry.temperature.toStringAsFixed(1)}°C',
+                                      '${telemetry.temperature.toStringAsFixed(1)}°F',
                                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -289,8 +323,8 @@ class _LiveTelemetryScreenState extends State<LiveTelemetryScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: LiveMetricsChart(
-                                    metricType: MetricType.temperature,
-                                    data: _getTemperatureData(telemetry),
+                                    metricType: LiveMetricType.temperature,
+                                    data: _getTemperatureData(telemetry, provider.telemetryHistory),
                                   ),
                                 ),
                               ),
@@ -335,8 +369,8 @@ class _LiveTelemetryScreenState extends State<LiveTelemetryScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: LiveMetricsChart(
-                                    metricType: MetricType.pulseRate,
-                                    data: _getHeartRateData(telemetry),
+                                    metricType: LiveMetricType.pulseRate,
+                                    data: _getHeartRateData(telemetry, provider.telemetryHistory),
                                   ),
                                 ),
                               ),
