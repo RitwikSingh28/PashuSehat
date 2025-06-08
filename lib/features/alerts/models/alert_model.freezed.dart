@@ -208,6 +208,7 @@ mixin _$Alert {
   AlertSeverity get severity => throw _privateConstructorUsedError;
   double get value => throw _privateConstructorUsedError;
   AlertThreshold get threshold => throw _privateConstructorUsedError;
+  @JsonKey(name: 'status')
   AlertStatus get status => throw _privateConstructorUsedError;
   String? get acknowledgedBy => throw _privateConstructorUsedError;
   @JsonKey(fromJson: _nullableTimestampFromJson)
@@ -238,7 +239,7 @@ abstract class $AlertCopyWith<$Res> {
     AlertSeverity severity,
     double value,
     AlertThreshold threshold,
-    AlertStatus status,
+    @JsonKey(name: 'status') AlertStatus status,
     String? acknowledgedBy,
     @JsonKey(fromJson: _nullableTimestampFromJson) DateTime? acknowledgedAt,
   });
@@ -377,7 +378,7 @@ abstract class _$$AlertImplCopyWith<$Res> implements $AlertCopyWith<$Res> {
     AlertSeverity severity,
     double value,
     AlertThreshold threshold,
-    AlertStatus status,
+    @JsonKey(name: 'status') AlertStatus status,
     String? acknowledgedBy,
     @JsonKey(fromJson: _nullableTimestampFromJson) DateTime? acknowledgedAt,
   });
@@ -500,7 +501,7 @@ class _$AlertImpl implements _Alert {
     required this.severity,
     required this.value,
     required this.threshold,
-    this.status = AlertStatus.newAlert,
+    @JsonKey(name: 'status') this.status = AlertStatus.new_,
     this.acknowledgedBy,
     @JsonKey(fromJson: _nullableTimestampFromJson) this.acknowledgedAt,
   });
@@ -531,7 +532,7 @@ class _$AlertImpl implements _Alert {
   @override
   final AlertThreshold threshold;
   @override
-  @JsonKey()
+  @JsonKey(name: 'status')
   final AlertStatus status;
   @override
   final String? acknowledgedBy;
@@ -616,7 +617,7 @@ abstract class _Alert implements Alert {
     required final AlertSeverity severity,
     required final double value,
     required final AlertThreshold threshold,
-    final AlertStatus status,
+    @JsonKey(name: 'status') final AlertStatus status,
     final String? acknowledgedBy,
     @JsonKey(fromJson: _nullableTimestampFromJson)
     final DateTime? acknowledgedAt,
@@ -647,6 +648,7 @@ abstract class _Alert implements Alert {
   @override
   AlertThreshold get threshold;
   @override
+  @JsonKey(name: 'status')
   AlertStatus get status;
   @override
   String? get acknowledgedBy;

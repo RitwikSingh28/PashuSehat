@@ -29,7 +29,7 @@ _$AlertImpl _$$AlertImplFromJson(Map<String, dynamic> json) => _$AlertImpl(
   threshold: AlertThreshold.fromJson(json['threshold'] as Map<String, dynamic>),
   status:
       $enumDecodeNullable(_$AlertStatusEnumMap, json['status']) ??
-      AlertStatus.newAlert,
+      AlertStatus.new_,
   acknowledgedBy: json['acknowledgedBy'] as String?,
   acknowledgedAt: _nullableTimestampFromJson(json['acknowledgedAt']),
 );
@@ -65,6 +65,6 @@ const _$AlertSeverityEnumMap = {
 };
 
 const _$AlertStatusEnumMap = {
-  AlertStatus.newAlert: 'new',
+  AlertStatus.new_: 'new',
   AlertStatus.acknowledged: 'acknowledged',
 };

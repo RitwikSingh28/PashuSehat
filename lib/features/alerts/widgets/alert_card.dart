@@ -60,7 +60,11 @@ class AlertCard extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Card(
+      elevation: alert.status == AlertStatus.new_ ? 2 : 1,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      color: alert.status == AlertStatus.new_
+          ? theme.colorScheme.surface
+          : theme.colorScheme.surfaceVariant.withOpacity(0.5),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -85,6 +89,16 @@ class AlertCard extends StatelessWidget {
                     ],
                   ),
                 ),
+                Text(
+                  _formatTimestamp(),
+                  style: theme.textTheme.bodySmall,
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
                 Text(
                   _formatTimestamp(),
                   style: theme.textTheme.bodySmall,

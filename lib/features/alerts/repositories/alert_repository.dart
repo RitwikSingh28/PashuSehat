@@ -29,11 +29,11 @@ class AlertRepository {
 
     final queryParams = <String, dynamic>{};
     if (status != null) {
-      queryParams['status'] = status.toString().split('.').last;
+      queryParams['status'] = 'new';  // Explicitly send 'new' when status is new_
     }
     if (startDate != null && endDate != null) {
-      queryParams['startDate'] = startDate.toIso8601String();
-      queryParams['endDate'] = endDate.toIso8601String();
+      queryParams['startDate'] = startDate.toUtc().toIso8601String();
+      queryParams['endDate'] = endDate.toUtc().toIso8601String();
     }
 
     try {
@@ -69,11 +69,11 @@ class AlertRepository {
 
     final queryParams = <String, dynamic>{};
     if (status != null) {
-      queryParams['status'] = status.toString().split('.').last;
+      queryParams['status'] = status == AlertStatus.new_ ? 'new' : 'acknowledged';
     }
     if (startDate != null && endDate != null) {
-      queryParams['startDate'] = startDate.toIso8601String();
-      queryParams['endDate'] = endDate.toIso8601String();
+      queryParams['startDate'] = startDate.toUtc().toIso8601String();
+      queryParams['endDate'] = endDate.toUtc().toIso8601String();
     }
 
     try {

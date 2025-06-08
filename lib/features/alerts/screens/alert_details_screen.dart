@@ -180,7 +180,7 @@ class _AlertDetailsScreenState extends State<AlertDetailsScreen> {
               ],
             ),
           ),
-          bottomNavigationBar: widget.alert.status == AlertStatus.newAlert
+          bottomNavigationBar: widget.alert.status == AlertStatus.new_
               ? SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.all(16),

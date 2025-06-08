@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:cattle_health/features/alerts/bloc/alert_bloc.dart';
+import 'package:cattle_health/features/alerts/bloc/alert_event.dart';
+import 'package:cattle_health/features/alerts/bloc/alert_state.dart';
 import 'package:cattle_health/features/alerts/models/alert_model.dart';
 import 'package:cattle_health/features/alerts/widgets/alert_card.dart';
 import 'package:cattle_health/routes/route_names.dart';
@@ -14,109 +18,28 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   bool _showRecent = true; // Toggle between 24h and all time
 
-  // TODO: Replace with actual data from a repository
-  final List<Alert> _mockAlerts = [
-    // Recent alerts (within 24 hours)
-    Alert(
-      id: '1',
-      cattleId: 'C001',
-      cattleName: 'Gauri',
-      userId: 'user123',
-      tagId: 'ABC12345678',
-      timestamp: DateTime.now().subtract(const Duration(hours: 1)),
-      type: AlertType.temperature,
-      value: 39.5,
-      severity: AlertSeverity.high,
-      threshold: const AlertThreshold(
-        min: 38.0,
-        max: 39.5,
-      ),
-    ),
-    Alert(
-      id: '2',
-      cattleId: 'C002',
-      cattleName: 'Lakshmi',
-      userId: 'user123',
-      tagId: 'ABC12345678',
-      timestamp: DateTime.now().subtract(const Duration(hours: 3)),
-      type: AlertType.pulseRate,
-      value: 95,
-      severity: AlertSeverity.medium,
-      threshold: const AlertThreshold(
-        min: 60,
-        max: 80,
-      ),
-    ),
-    Alert(
-      id: '3',
-      cattleId: 'C003',
-      cattleName: 'Nandi',
-      userId: 'user123',
-      tagId: 'ABC12345678',
-      timestamp: DateTime.now().subtract(const Duration(hours: 5)),
-      type: AlertType.motion,
-      value: 1.0,
-      severity: AlertSeverity.low,
-      threshold: const AlertThreshold(
-        min: 0,
-        max: 1,
-      ),
-    ),
-    Alert(
-      id: '4',
-      cattleId: 'C001',
-      cattleName: 'Gauri',
-      userId: 'user123',
-      tagId: 'ABC12345678',
-      timestamp: DateTime.now().subtract(const Duration(hours: 8)),
-      type: AlertType.temperature,
-      value: 38.9,
-      severity: AlertSeverity.low,
-      threshold: const AlertThreshold(
-        min: 38.0,
-        max: 39.5,
-      ),
-    ),
+  @override
+  void initState() {
+    super.initState();
+    _fetchAlerts();
+  }
 
-    // Older alerts (beyond 24 hours)
-    Alert(
-      id: '5',
-      cattleId: 'C004',
-      cattleName: 'Shiva',
-      userId: 'user123',
-      tagId: 'ABC12345678',
-      timestamp: DateTime.now().subtract(const Duration(days: 2)),
-      type: AlertType.pulseRate,
-      value: 92,
-      severity: AlertSeverity.high,
-      threshold: const AlertThreshold(
-        min: 60,
-        max: 80,
-      ),
-    ),
-    Alert(
-      id: '6',
-      cattleId: 'C002',
-      cattleName: 'Lakshmi',
-      userId: 'user123',
-      tagId: 'ABC12345678',
-      timestamp: DateTime.now().subtract(const Duration(days: 3)),
-      type: AlertType.motion,
-      value: 0.8,
-      severity: AlertSeverity.medium,
-      threshold: const AlertThreshold(
-        min: 0,
-        max: 1,
-      ),
-    ),
-  ];
-
-  List<Alert> get _filteredAlerts {
+  void _fetchAlerts() {
     if (_showRecent) {
-      final cutoff = DateTime.now().subtract(const Duration(hours: 24));
-      return _mockAlerts.where((alert) => alert.timestamp.isAfter(cutoff)).toList();
+      context.read<AlertBloc>().add(
+            FetchUserAlerts(
+              status: AlertStatus.new_,
+              startDate: DateTime.now().subtract(const Duration(hours: 24)),
+              endDate: DateTime.now(),
+            ),
+          );
+    } else {
+      context.read<AlertBloc>().add(
+            FetchUserAlerts(
+              status: AlertStatus.new_,
+            ),
+          );
     }
-    return _mockAlerts;
   }
 
   @override
@@ -151,16 +74,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         setState(() {
                           _showRecent = value;
                         });
+                        _fetchAlerts();
                       },
                     ),
                     const SizedBox(width: 8),
                     FilterChip(
-                      label: const Text('All'),
+                      label: const Text('All Time'),
                       selected: !_showRecent,
                       onSelected: (value) {
                         setState(() {
                           _showRecent = !value;
                         });
+                        _fetchAlerts();
                       },
                     ),
                   ],
@@ -169,34 +94,76 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
           Expanded(
-            child: Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: _filteredAlerts.length,
-                    itemBuilder: (context, index) {
-                      final alert = _filteredAlerts[index];
-                      return InkWell(
-                        onTap: () {
-                          // Navigate to alert details
-                          context.go(RouteNames.getAlertDetailsPath(alert.id));
-                        },
-                        child: AlertCard(alert: alert),
+            child: BlocBuilder<AlertBloc, AlertState>(
+              builder: (context, state) {
+                return state.when(
+                  initial: () => const Center(child: CircularProgressIndicator()),
+                  loading: () => const Center(child: CircularProgressIndicator()),
+                  loaded: (alerts, filterStatus, startDate, endDate) {
+                    if (alerts.isEmpty) {
+                      return Center(
+                        child: Text(
+                          'No alerts found',
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            color: theme.textTheme.bodySmall?.color,
+                          ),
+                        ),
                       );
-                    },
-                  ),
-                ),
-                if (_mockAlerts.length > 3)
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: TextButton(
-                      onPressed: () {
-                        context.go(RouteNames.alerts);
-                      },
-                      child: const Text('Show More'),
+                    }
+
+                    return Column(
+                      children: [
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: alerts.length,
+                            itemBuilder: (context, index) {
+                              final alert = alerts[index];
+                              return InkWell(
+                                onTap: () {
+                                  context.go(RouteNames.getAlertDetailsPath(alert.id));
+                                },
+                                child: AlertCard(alert: alert),
+                              );
+                            },
+                          ),
+                        ),
+                        if (alerts.length > 3)
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: TextButton(
+                              onPressed: () {
+                                context.go(RouteNames.alerts);
+                              },
+                              child: const Text('Show More'),
+                            ),
+                          ),
+                      ],
+                    );
+                  },
+                  error: (message) => Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Error: $message',
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            color: theme.colorScheme.error,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: _fetchAlerts,
+                          child: const Text('Retry'),
+                        ),
+                      ],
                     ),
                   ),
-              ],
+                  acknowledging: () => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  acknowledged: (alert) => const SizedBox.shrink(),
+                );
+              },
             ),
           ),
         ],

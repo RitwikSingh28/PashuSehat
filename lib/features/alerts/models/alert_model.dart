@@ -25,7 +25,8 @@ enum AlertSeverity {
 
 enum AlertStatus {
   @JsonValue('new')
-  newAlert,
+  @JsonKey(name: 'new')
+  new_,  // Using new_ since 'new' is a reserved word in Dart
   @JsonValue('acknowledged')
   acknowledged,
 }
@@ -54,7 +55,7 @@ class Alert with _$Alert {
     required AlertSeverity severity,
     required double value,
     required AlertThreshold threshold,
-    @Default(AlertStatus.newAlert) AlertStatus status,
+    @JsonKey(name: 'status') @Default(AlertStatus.new_) AlertStatus status,
     String? acknowledgedBy,
     @JsonKey(fromJson: _nullableTimestampFromJson) DateTime? acknowledgedAt,
   }) = _Alert;
@@ -65,7 +66,7 @@ class Alert with _$Alert {
 DateTime _timestampFromJson(dynamic value) {
   if (value == null) throw ArgumentError('Timestamp cannot be null');
   if (value is int) return DateTime.fromMillisecondsSinceEpoch(value);
-  if (value is String) return DateTime.parse(value);
+  if (value is String) return DateTime.parse(value).toLocal();
   if (value is DateTime) return value;
   throw ArgumentError('Invalid timestamp format: $value');
 }
@@ -73,7 +74,7 @@ DateTime _timestampFromJson(dynamic value) {
 DateTime? _nullableTimestampFromJson(dynamic value) {
   if (value == null) return null;
   if (value is int) return DateTime.fromMillisecondsSinceEpoch(value);
-  if (value is String) return DateTime.parse(value);
+  if (value is String) return DateTime.parse(value).toLocal();
   if (value is DateTime) return value;
   throw ArgumentError('Invalid timestamp format: $value');
 }
