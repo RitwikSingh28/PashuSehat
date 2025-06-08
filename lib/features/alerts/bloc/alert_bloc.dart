@@ -91,7 +91,7 @@ class AlertBloc extends Bloc<AlertEvent, AlertState> {
 
       // Update the alert in the current list
       final updatedAlerts = _currentAlerts.map((alert) {
-        if (alert.alertId == event.alertId) {
+        if (alert.id == event.alertId) {
           return acknowledgedAlert;
         }
         return alert;

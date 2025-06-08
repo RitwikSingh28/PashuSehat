@@ -123,7 +123,7 @@ class __$$AlertThresholdImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$AlertThresholdImpl implements _AlertThreshold {
-  const _$AlertThresholdImpl({this.min, this.max});
+  const _$AlertThresholdImpl({required this.min, required this.max});
 
   factory _$AlertThresholdImpl.fromJson(Map<String, dynamic> json) =>
       _$$AlertThresholdImplFromJson(json);
@@ -169,8 +169,10 @@ class _$AlertThresholdImpl implements _AlertThreshold {
 }
 
 abstract class _AlertThreshold implements AlertThreshold {
-  const factory _AlertThreshold({final double? min, final double? max}) =
-      _$AlertThresholdImpl;
+  const factory _AlertThreshold({
+    required final double? min,
+    required final double? max,
+  }) = _$AlertThresholdImpl;
 
   factory _AlertThreshold.fromJson(Map<String, dynamic> json) =
       _$AlertThresholdImpl.fromJson;
@@ -194,16 +196,18 @@ Alert _$AlertFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Alert {
+  @JsonKey(name: 'alertId')
   String get id => throw _privateConstructorUsedError;
+  String get userId => throw _privateConstructorUsedError;
   String get cattleId => throw _privateConstructorUsedError;
+  String? get cattleName => throw _privateConstructorUsedError;
   String get tagId => throw _privateConstructorUsedError;
   @JsonKey(fromJson: _timestampFromJson)
   DateTime get timestamp => throw _privateConstructorUsedError;
   AlertType get type => throw _privateConstructorUsedError;
+  AlertSeverity get severity => throw _privateConstructorUsedError;
   double get value => throw _privateConstructorUsedError;
-  String? get cattleName => throw _privateConstructorUsedError;
-  AlertSeverity? get severity => throw _privateConstructorUsedError;
-  AlertThreshold? get threshold => throw _privateConstructorUsedError;
+  AlertThreshold get threshold => throw _privateConstructorUsedError;
   AlertStatus get status => throw _privateConstructorUsedError;
   String? get acknowledgedBy => throw _privateConstructorUsedError;
   @JsonKey(fromJson: _nullableTimestampFromJson)
@@ -224,21 +228,22 @@ abstract class $AlertCopyWith<$Res> {
       _$AlertCopyWithImpl<$Res, Alert>;
   @useResult
   $Res call({
-    String id,
+    @JsonKey(name: 'alertId') String id,
+    String userId,
     String cattleId,
+    String? cattleName,
     String tagId,
     @JsonKey(fromJson: _timestampFromJson) DateTime timestamp,
     AlertType type,
+    AlertSeverity severity,
     double value,
-    String? cattleName,
-    AlertSeverity? severity,
-    AlertThreshold? threshold,
+    AlertThreshold threshold,
     AlertStatus status,
     String? acknowledgedBy,
     @JsonKey(fromJson: _nullableTimestampFromJson) DateTime? acknowledgedAt,
   });
 
-  $AlertThresholdCopyWith<$Res>? get threshold;
+  $AlertThresholdCopyWith<$Res> get threshold;
 }
 
 /// @nodoc
@@ -257,14 +262,15 @@ class _$AlertCopyWithImpl<$Res, $Val extends Alert>
   @override
   $Res call({
     Object? id = null,
+    Object? userId = null,
     Object? cattleId = null,
+    Object? cattleName = freezed,
     Object? tagId = null,
     Object? timestamp = null,
     Object? type = null,
+    Object? severity = null,
     Object? value = null,
-    Object? cattleName = freezed,
-    Object? severity = freezed,
-    Object? threshold = freezed,
+    Object? threshold = null,
     Object? status = null,
     Object? acknowledgedBy = freezed,
     Object? acknowledgedAt = freezed,
@@ -276,11 +282,21 @@ class _$AlertCopyWithImpl<$Res, $Val extends Alert>
                     ? _value.id
                     : id // ignore: cast_nullable_to_non_nullable
                         as String,
+            userId:
+                null == userId
+                    ? _value.userId
+                    : userId // ignore: cast_nullable_to_non_nullable
+                        as String,
             cattleId:
                 null == cattleId
                     ? _value.cattleId
                     : cattleId // ignore: cast_nullable_to_non_nullable
                         as String,
+            cattleName:
+                freezed == cattleName
+                    ? _value.cattleName
+                    : cattleName // ignore: cast_nullable_to_non_nullable
+                        as String?,
             tagId:
                 null == tagId
                     ? _value.tagId
@@ -296,26 +312,21 @@ class _$AlertCopyWithImpl<$Res, $Val extends Alert>
                     ? _value.type
                     : type // ignore: cast_nullable_to_non_nullable
                         as AlertType,
+            severity:
+                null == severity
+                    ? _value.severity
+                    : severity // ignore: cast_nullable_to_non_nullable
+                        as AlertSeverity,
             value:
                 null == value
                     ? _value.value
                     : value // ignore: cast_nullable_to_non_nullable
                         as double,
-            cattleName:
-                freezed == cattleName
-                    ? _value.cattleName
-                    : cattleName // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            severity:
-                freezed == severity
-                    ? _value.severity
-                    : severity // ignore: cast_nullable_to_non_nullable
-                        as AlertSeverity?,
             threshold:
-                freezed == threshold
+                null == threshold
                     ? _value.threshold
                     : threshold // ignore: cast_nullable_to_non_nullable
-                        as AlertThreshold?,
+                        as AlertThreshold,
             status:
                 null == status
                     ? _value.status
@@ -340,12 +351,8 @@ class _$AlertCopyWithImpl<$Res, $Val extends Alert>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $AlertThresholdCopyWith<$Res>? get threshold {
-    if (_value.threshold == null) {
-      return null;
-    }
-
-    return $AlertThresholdCopyWith<$Res>(_value.threshold!, (value) {
+  $AlertThresholdCopyWith<$Res> get threshold {
+    return $AlertThresholdCopyWith<$Res>(_value.threshold, (value) {
       return _then(_value.copyWith(threshold: value) as $Val);
     });
   }
@@ -360,22 +367,23 @@ abstract class _$$AlertImplCopyWith<$Res> implements $AlertCopyWith<$Res> {
   @override
   @useResult
   $Res call({
-    String id,
+    @JsonKey(name: 'alertId') String id,
+    String userId,
     String cattleId,
+    String? cattleName,
     String tagId,
     @JsonKey(fromJson: _timestampFromJson) DateTime timestamp,
     AlertType type,
+    AlertSeverity severity,
     double value,
-    String? cattleName,
-    AlertSeverity? severity,
-    AlertThreshold? threshold,
+    AlertThreshold threshold,
     AlertStatus status,
     String? acknowledgedBy,
     @JsonKey(fromJson: _nullableTimestampFromJson) DateTime? acknowledgedAt,
   });
 
   @override
-  $AlertThresholdCopyWith<$Res>? get threshold;
+  $AlertThresholdCopyWith<$Res> get threshold;
 }
 
 /// @nodoc
@@ -393,14 +401,15 @@ class __$$AlertImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? userId = null,
     Object? cattleId = null,
+    Object? cattleName = freezed,
     Object? tagId = null,
     Object? timestamp = null,
     Object? type = null,
+    Object? severity = null,
     Object? value = null,
-    Object? cattleName = freezed,
-    Object? severity = freezed,
-    Object? threshold = freezed,
+    Object? threshold = null,
     Object? status = null,
     Object? acknowledgedBy = freezed,
     Object? acknowledgedAt = freezed,
@@ -412,11 +421,21 @@ class __$$AlertImplCopyWithImpl<$Res>
                 ? _value.id
                 : id // ignore: cast_nullable_to_non_nullable
                     as String,
+        userId:
+            null == userId
+                ? _value.userId
+                : userId // ignore: cast_nullable_to_non_nullable
+                    as String,
         cattleId:
             null == cattleId
                 ? _value.cattleId
                 : cattleId // ignore: cast_nullable_to_non_nullable
                     as String,
+        cattleName:
+            freezed == cattleName
+                ? _value.cattleName
+                : cattleName // ignore: cast_nullable_to_non_nullable
+                    as String?,
         tagId:
             null == tagId
                 ? _value.tagId
@@ -432,26 +451,21 @@ class __$$AlertImplCopyWithImpl<$Res>
                 ? _value.type
                 : type // ignore: cast_nullable_to_non_nullable
                     as AlertType,
+        severity:
+            null == severity
+                ? _value.severity
+                : severity // ignore: cast_nullable_to_non_nullable
+                    as AlertSeverity,
         value:
             null == value
                 ? _value.value
                 : value // ignore: cast_nullable_to_non_nullable
                     as double,
-        cattleName:
-            freezed == cattleName
-                ? _value.cattleName
-                : cattleName // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        severity:
-            freezed == severity
-                ? _value.severity
-                : severity // ignore: cast_nullable_to_non_nullable
-                    as AlertSeverity?,
         threshold:
-            freezed == threshold
+            null == threshold
                 ? _value.threshold
                 : threshold // ignore: cast_nullable_to_non_nullable
-                    as AlertThreshold?,
+                    as AlertThreshold,
         status:
             null == status
                 ? _value.status
@@ -476,15 +490,16 @@ class __$$AlertImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$AlertImpl implements _Alert {
   const _$AlertImpl({
-    required this.id,
+    @JsonKey(name: 'alertId') required this.id,
+    required this.userId,
     required this.cattleId,
+    this.cattleName,
     required this.tagId,
     @JsonKey(fromJson: _timestampFromJson) required this.timestamp,
     required this.type,
+    required this.severity,
     required this.value,
-    this.cattleName,
-    this.severity,
-    this.threshold,
+    required this.threshold,
     this.status = AlertStatus.newAlert,
     this.acknowledgedBy,
     @JsonKey(fromJson: _nullableTimestampFromJson) this.acknowledgedAt,
@@ -494,9 +509,14 @@ class _$AlertImpl implements _Alert {
       _$$AlertImplFromJson(json);
 
   @override
+  @JsonKey(name: 'alertId')
   final String id;
   @override
+  final String userId;
+  @override
   final String cattleId;
+  @override
+  final String? cattleName;
   @override
   final String tagId;
   @override
@@ -505,13 +525,11 @@ class _$AlertImpl implements _Alert {
   @override
   final AlertType type;
   @override
+  final AlertSeverity severity;
+  @override
   final double value;
   @override
-  final String? cattleName;
-  @override
-  final AlertSeverity? severity;
-  @override
-  final AlertThreshold? threshold;
+  final AlertThreshold threshold;
   @override
   @JsonKey()
   final AlertStatus status;
@@ -523,7 +541,7 @@ class _$AlertImpl implements _Alert {
 
   @override
   String toString() {
-    return 'Alert(id: $id, cattleId: $cattleId, tagId: $tagId, timestamp: $timestamp, type: $type, value: $value, cattleName: $cattleName, severity: $severity, threshold: $threshold, status: $status, acknowledgedBy: $acknowledgedBy, acknowledgedAt: $acknowledgedAt)';
+    return 'Alert(id: $id, userId: $userId, cattleId: $cattleId, cattleName: $cattleName, tagId: $tagId, timestamp: $timestamp, type: $type, severity: $severity, value: $value, threshold: $threshold, status: $status, acknowledgedBy: $acknowledgedBy, acknowledgedAt: $acknowledgedAt)';
   }
 
   @override
@@ -532,17 +550,18 @@ class _$AlertImpl implements _Alert {
         (other.runtimeType == runtimeType &&
             other is _$AlertImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.cattleId, cattleId) ||
                 other.cattleId == cattleId) &&
+            (identical(other.cattleName, cattleName) ||
+                other.cattleName == cattleName) &&
             (identical(other.tagId, tagId) || other.tagId == tagId) &&
             (identical(other.timestamp, timestamp) ||
                 other.timestamp == timestamp) &&
             (identical(other.type, type) || other.type == type) &&
-            (identical(other.value, value) || other.value == value) &&
-            (identical(other.cattleName, cattleName) ||
-                other.cattleName == cattleName) &&
             (identical(other.severity, severity) ||
                 other.severity == severity) &&
+            (identical(other.value, value) || other.value == value) &&
             (identical(other.threshold, threshold) ||
                 other.threshold == threshold) &&
             (identical(other.status, status) || other.status == status) &&
@@ -557,13 +576,14 @@ class _$AlertImpl implements _Alert {
   int get hashCode => Object.hash(
     runtimeType,
     id,
+    userId,
     cattleId,
+    cattleName,
     tagId,
     timestamp,
     type,
-    value,
-    cattleName,
     severity,
+    value,
     threshold,
     status,
     acknowledgedBy,
@@ -586,15 +606,16 @@ class _$AlertImpl implements _Alert {
 
 abstract class _Alert implements Alert {
   const factory _Alert({
-    required final String id,
+    @JsonKey(name: 'alertId') required final String id,
+    required final String userId,
     required final String cattleId,
+    final String? cattleName,
     required final String tagId,
     @JsonKey(fromJson: _timestampFromJson) required final DateTime timestamp,
     required final AlertType type,
+    required final AlertSeverity severity,
     required final double value,
-    final String? cattleName,
-    final AlertSeverity? severity,
-    final AlertThreshold? threshold,
+    required final AlertThreshold threshold,
     final AlertStatus status,
     final String? acknowledgedBy,
     @JsonKey(fromJson: _nullableTimestampFromJson)
@@ -604,9 +625,14 @@ abstract class _Alert implements Alert {
   factory _Alert.fromJson(Map<String, dynamic> json) = _$AlertImpl.fromJson;
 
   @override
+  @JsonKey(name: 'alertId')
   String get id;
   @override
+  String get userId;
+  @override
   String get cattleId;
+  @override
+  String? get cattleName;
   @override
   String get tagId;
   @override
@@ -615,13 +641,11 @@ abstract class _Alert implements Alert {
   @override
   AlertType get type;
   @override
+  AlertSeverity get severity;
+  @override
   double get value;
   @override
-  String? get cattleName;
-  @override
-  AlertSeverity? get severity;
-  @override
-  AlertThreshold? get threshold;
+  AlertThreshold get threshold;
   @override
   AlertStatus get status;
   @override

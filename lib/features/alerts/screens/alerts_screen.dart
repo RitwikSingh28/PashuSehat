@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:cattle_health/features/alerts/bloc/alert_bloc.dart';
+import 'package:cattle_health/features/alerts/bloc/alert_event.dart';
+import 'package:cattle_health/features/alerts/bloc/alert_state.dart';
 import 'package:cattle_health/features/alerts/models/alert_model.dart';
 import 'package:cattle_health/features/alerts/widgets/alert_card.dart';
 import 'package:cattle_health/routes/route_names.dart';
@@ -16,59 +20,10 @@ class _AlertsScreenState extends State<AlertsScreen> with SingleTickerProviderSt
   late TabController _tabController;
   AlertType? _selectedType;
 
-  // TODO: Replace with actual data from a repository
-  final List<Alert> _mockAlerts = [
-    // Recent alerts (within 24 hours)
-    Alert(
-      id: '1',
-      cattleId: 'C001',
-      cattleName: 'Gauri',
-      tagId: 'TAG001',
-      timestamp: DateTime.now().subtract(const Duration(hours: 1)),
-      type: AlertType.temperature,
-      value: 39.5,
-    ),
-    Alert(
-      id: '2',
-      cattleId: 'C002',
-      cattleName: 'Lakshmi',
-      tagId: 'TAG002',
-      timestamp: DateTime.now().subtract(const Duration(hours: 3)),
-      type: AlertType.pulseRate,
-      value: 95,
-    ),
-    Alert(
-      id: '3',
-      cattleId: 'C003',
-      cattleName: 'Nandi',
-      tagId: 'TAG003',
-      timestamp: DateTime.now().subtract(const Duration(hours: 5)),
-      type: AlertType.motion,
-      value: 1.0,
-    ),
-    Alert(
-      id: '4',
-      cattleId: 'C001',
-      cattleName: 'Gauri',
-      tagId: 'TAG001',
-      timestamp: DateTime.now().subtract(const Duration(hours: 8)),
-      type: AlertType.temperature,
-      value: 38.9,
-    ),
-    Alert(
-      id: '5',
-      cattleId: 'C004',
-      cattleName: 'Shiva',
-      tagId: 'TAG004',
-      timestamp: DateTime.now().subtract(const Duration(days: 2)),
-      type: AlertType.pulseRate,
-      value: 92,
-    ),
-  ];
 
-  List<Alert> get _filteredAlerts {
-    if (_selectedType == null) return _mockAlerts;
-    return _mockAlerts.where((alert) => alert.type == _selectedType).toList();
+  List<Alert> _filterAlerts(List<Alert> alerts) {
+    if (_selectedType == null) return alerts;
+    return alerts.where((alert) => alert.type == _selectedType).toList();
   }
 
   @override
@@ -82,6 +37,9 @@ class _AlertsScreenState extends State<AlertsScreen> with SingleTickerProviderSt
             : AlertType.values[_tabController.index - 1];
       });
     });
+
+    // Fetch alerts when screen loads
+    context.read<AlertBloc>().add(const AlertEvent.fetchUserAlerts());
   }
 
   @override
@@ -151,16 +109,70 @@ class _AlertsScreenState extends State<AlertsScreen> with SingleTickerProviderSt
               ),
             ];
           },
-          body: ListView.builder(
-            padding: const EdgeInsets.only(top: 8),
-            itemCount: _filteredAlerts.length,
-            itemBuilder: (context, index) {
-              final alert = _filteredAlerts[index];
-              return InkWell(
-                onTap: () {
-                  context.go(RouteNames.getAlertDetailsPath(alert.id));
+          body: BlocConsumer<AlertBloc, AlertState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                error: (message) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(message)),
+                  );
                 },
-                child: AlertCard(alert: alert),
+                orElse: () {},
+              );
+            },
+            builder: (context, state) {
+              return state.when(
+                initial: () => const Center(child: CircularProgressIndicator()),
+                loading: () => const Center(child: CircularProgressIndicator()),
+                loaded: (alerts, status, startDate, endDate) {
+                  final filteredAlerts = _filterAlerts(alerts);
+                  if (filteredAlerts.isEmpty) {
+                    return Center(
+                      child: Text(
+                        'No alerts found',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    );
+                  }
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      context.read<AlertBloc>().add(const AlertEvent.fetchUserAlerts());
+                    },
+                    child: ListView.builder(
+                      padding: const EdgeInsets.only(top: 8),
+                      itemCount: filteredAlerts.length,
+                      itemBuilder: (context, index) {
+                        final alert = filteredAlerts[index];
+                        return InkWell(
+                          onTap: () {
+                            context.go(
+                              RouteNames.getAlertDetailsPath(alert.id),
+                              extra: alert,
+                            );
+                          },
+                          child: AlertCard(alert: alert),
+                        );
+                      },
+                    ),
+                  );
+                },
+                error: (message) => Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(message),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          context.read<AlertBloc>().add(const AlertEvent.fetchUserAlerts());
+                        },
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  ),
+                ),
+                acknowledging: () => const Center(child: CircularProgressIndicator()),
+                acknowledged: (alert) => const SizedBox(), // This state is handled in details screen
               );
             },
           ),

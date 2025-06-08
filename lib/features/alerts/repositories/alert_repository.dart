@@ -37,10 +37,16 @@ class AlertRepository {
     }
 
     try {
+      print('Making GET request to ${_dio.options.baseUrl}/alerts');
+      print('Query parameters: $queryParams');
+
       final response = await _dio.get(
         '/alerts',
         queryParameters: queryParams,
       );
+
+      print('Response status: ${response.statusCode}');
+      print('Response data: ${response.data}');
 
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data;

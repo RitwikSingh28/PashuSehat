@@ -1,6 +1,10 @@
 import 'package:cattle_health/features/cattle/screens/live_telemetry_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:cattle_health/features/alerts/bloc/alert_bloc.dart';
+import 'package:cattle_health/features/alerts/repositories/alert_repository.dart';
+import 'package:cattle_health/features/auth/services/token_storage.dart';
 import 'package:cattle_health/core/widgets/app_shell.dart';
 import 'package:cattle_health/features/auth/screens/login_screen.dart';
 import 'package:cattle_health/features/auth/screens/signup_screen.dart';
@@ -86,22 +90,35 @@ class AppRouter {
           // Alerts tab and details
           GoRoute(
             path: RouteNames.alerts,
-            builder: (context, state) => const AlertsScreen(),
+            builder: (context, state) => BlocProvider(
+              create: (context) => AlertBloc(
+                alertRepository: AlertRepository(
+                  tokenStorage: context.read<AuthStorage>(),
+                ),
+              ),
+              child: const AlertsScreen(),
+            ),
             routes: [
               GoRoute(
                 path: ':id',
                 builder: (context, state) {
                   final id = state.pathParameters['id']!;
-                  final mockAlert = Alert(
-                    id: id,
-                    cattleId: 'C001',
-                    cattleName: 'Gauri',
-                    tagId: 'TAG001',
-                    timestamp: DateTime.now(),
-                    type: AlertType.temperature,
-                    value: 39.5,
+                  return BlocProvider(
+                    create: (context) => AlertBloc(
+                      alertRepository: AlertRepository(
+                        tokenStorage: context.read<AuthStorage>(),
+                      ),
+                    ),
+                    child: Builder(
+                      builder: (context) {
+                        final alert = state.extra as Alert?;
+                        if (alert == null) {
+                          return const Center(child: Text('Alert not found'));
+                        }
+                        return AlertDetailsScreen(alert: alert);
+                      },
+                    ),
                   );
-                  return AlertDetailsScreen(alert: mockAlert);
                 },
               ),
             ],

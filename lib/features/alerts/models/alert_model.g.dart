@@ -17,18 +17,16 @@ Map<String, dynamic> _$$AlertThresholdImplToJson(
 ) => <String, dynamic>{'min': instance.min, 'max': instance.max};
 
 _$AlertImpl _$$AlertImplFromJson(Map<String, dynamic> json) => _$AlertImpl(
-  id: json['id'] as String,
+  id: json['alertId'] as String,
+  userId: json['userId'] as String,
   cattleId: json['cattleId'] as String,
+  cattleName: json['cattleName'] as String?,
   tagId: json['tagId'] as String,
   timestamp: _timestampFromJson(json['timestamp']),
   type: $enumDecode(_$AlertTypeEnumMap, json['type']),
+  severity: $enumDecode(_$AlertSeverityEnumMap, json['severity']),
   value: (json['value'] as num).toDouble(),
-  cattleName: json['cattleName'] as String?,
-  severity: $enumDecodeNullable(_$AlertSeverityEnumMap, json['severity']),
-  threshold:
-      json['threshold'] == null
-          ? null
-          : AlertThreshold.fromJson(json['threshold'] as Map<String, dynamic>),
+  threshold: AlertThreshold.fromJson(json['threshold'] as Map<String, dynamic>),
   status:
       $enumDecodeNullable(_$AlertStatusEnumMap, json['status']) ??
       AlertStatus.newAlert,
@@ -38,14 +36,15 @@ _$AlertImpl _$$AlertImplFromJson(Map<String, dynamic> json) => _$AlertImpl(
 
 Map<String, dynamic> _$$AlertImplToJson(_$AlertImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'alertId': instance.id,
+      'userId': instance.userId,
       'cattleId': instance.cattleId,
+      'cattleName': instance.cattleName,
       'tagId': instance.tagId,
       'timestamp': instance.timestamp.toIso8601String(),
       'type': _$AlertTypeEnumMap[instance.type]!,
+      'severity': _$AlertSeverityEnumMap[instance.severity]!,
       'value': instance.value,
-      'cattleName': instance.cattleName,
-      'severity': _$AlertSeverityEnumMap[instance.severity],
       'threshold': instance.threshold,
       'status': _$AlertStatusEnumMap[instance.status]!,
       'acknowledgedBy': instance.acknowledgedBy,
