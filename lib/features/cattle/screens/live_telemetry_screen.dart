@@ -1,14 +1,15 @@
 import 'package:cattle_health/features/cattle/models/telemetry_data.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:cattle_health/features/cattle/models/socket_connection_state.dart';
 import 'package:provider/provider.dart';
 import 'package:cattle_health/features/cattle/widgets/live_metrics_chart.dart';
+import 'package:intl/intl.dart';
 import 'package:cattle_health/features/cattle/providers/telemetry_provider.dart';
 import 'package:cattle_health/features/auth/bloc/auth_bloc.dart';
 import 'package:cattle_health/features/auth/bloc/auth_state.dart';
 import 'package:cattle_health/features/cattle/widgets/metrics_chart.dart';
 import 'package:cattle_health/features/cattle/services/socket_service.dart';
-import 'package:intl/intl.dart';
 
 class LiveTelemetryScreen extends StatefulWidget {
   final String cattleId;
@@ -148,7 +149,8 @@ class _LiveTelemetryScreenState extends State<LiveTelemetryScreen> {
     return DateFormat('MMM dd, yyyy HH:mm:ss').format(date);
   }
 
-  Color _getBatteryColor(int level) {
+  Color _getBatteryColor(int? level) {
+    level = level ?? 100;  // Default to 100 if null
     if (level >= 60) return Colors.green;
     if (level >= 20) return Colors.orange;
     return Colors.red;

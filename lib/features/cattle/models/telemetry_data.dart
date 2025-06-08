@@ -7,12 +7,12 @@ part 'telemetry_data.g.dart';
 class TelemetryData with _$TelemetryData {
   const factory TelemetryData({
     required String tagId,
-    required int batteryLevel,
-    required double motionData,
-    required int timestamp,
-    required int ttl,
+    required String cattleId,
     required double temperature,
     @JsonKey(name: 'pulseRate') required int heartRate,
+    required double motionData,
+    @JsonKey(defaultValue: 100, includeIfNull: false) int? batteryLevel,
+    required int timestamp,
   }) = _TelemetryData;
 
   factory TelemetryData.fromJson(Map<String, dynamic> json) => _$TelemetryDataFromJson(json);

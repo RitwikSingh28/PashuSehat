@@ -22,13 +22,14 @@ TelemetryData _$TelemetryDataFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$TelemetryData {
   String get tagId => throw _privateConstructorUsedError;
-  int get batteryLevel => throw _privateConstructorUsedError;
-  double get motionData => throw _privateConstructorUsedError;
-  int get timestamp => throw _privateConstructorUsedError;
-  int get ttl => throw _privateConstructorUsedError;
+  String get cattleId => throw _privateConstructorUsedError;
   double get temperature => throw _privateConstructorUsedError;
   @JsonKey(name: 'pulseRate')
   int get heartRate => throw _privateConstructorUsedError;
+  double get motionData => throw _privateConstructorUsedError;
+  @JsonKey(defaultValue: 100)
+  int? get batteryLevel => throw _privateConstructorUsedError;
+  int get timestamp => throw _privateConstructorUsedError;
 
   /// Serializes this TelemetryData to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -49,12 +50,12 @@ abstract class $TelemetryDataCopyWith<$Res> {
   @useResult
   $Res call({
     String tagId,
-    int batteryLevel,
-    double motionData,
-    int timestamp,
-    int ttl,
+    String cattleId,
     double temperature,
     @JsonKey(name: 'pulseRate') int heartRate,
+    double motionData,
+    @JsonKey(defaultValue: 100) int? batteryLevel,
+    int timestamp,
   });
 }
 
@@ -74,12 +75,12 @@ class _$TelemetryDataCopyWithImpl<$Res, $Val extends TelemetryData>
   @override
   $Res call({
     Object? tagId = null,
-    Object? batteryLevel = null,
-    Object? motionData = null,
-    Object? timestamp = null,
-    Object? ttl = null,
+    Object? cattleId = null,
     Object? temperature = null,
     Object? heartRate = null,
+    Object? motionData = null,
+    Object? batteryLevel = freezed,
+    Object? timestamp = null,
   }) {
     return _then(
       _value.copyWith(
@@ -88,26 +89,11 @@ class _$TelemetryDataCopyWithImpl<$Res, $Val extends TelemetryData>
                     ? _value.tagId
                     : tagId // ignore: cast_nullable_to_non_nullable
                         as String,
-            batteryLevel:
-                null == batteryLevel
-                    ? _value.batteryLevel
-                    : batteryLevel // ignore: cast_nullable_to_non_nullable
-                        as int,
-            motionData:
-                null == motionData
-                    ? _value.motionData
-                    : motionData // ignore: cast_nullable_to_non_nullable
-                        as double,
-            timestamp:
-                null == timestamp
-                    ? _value.timestamp
-                    : timestamp // ignore: cast_nullable_to_non_nullable
-                        as int,
-            ttl:
-                null == ttl
-                    ? _value.ttl
-                    : ttl // ignore: cast_nullable_to_non_nullable
-                        as int,
+            cattleId:
+                null == cattleId
+                    ? _value.cattleId
+                    : cattleId // ignore: cast_nullable_to_non_nullable
+                        as String,
             temperature:
                 null == temperature
                     ? _value.temperature
@@ -117,6 +103,21 @@ class _$TelemetryDataCopyWithImpl<$Res, $Val extends TelemetryData>
                 null == heartRate
                     ? _value.heartRate
                     : heartRate // ignore: cast_nullable_to_non_nullable
+                        as int,
+            motionData:
+                null == motionData
+                    ? _value.motionData
+                    : motionData // ignore: cast_nullable_to_non_nullable
+                        as double,
+            batteryLevel:
+                freezed == batteryLevel
+                    ? _value.batteryLevel
+                    : batteryLevel // ignore: cast_nullable_to_non_nullable
+                        as int?,
+            timestamp:
+                null == timestamp
+                    ? _value.timestamp
+                    : timestamp // ignore: cast_nullable_to_non_nullable
                         as int,
           )
           as $Val,
@@ -135,12 +136,12 @@ abstract class _$$TelemetryDataImplCopyWith<$Res>
   @useResult
   $Res call({
     String tagId,
-    int batteryLevel,
-    double motionData,
-    int timestamp,
-    int ttl,
+    String cattleId,
     double temperature,
     @JsonKey(name: 'pulseRate') int heartRate,
+    double motionData,
+    @JsonKey(defaultValue: 100) int? batteryLevel,
+    int timestamp,
   });
 }
 
@@ -159,12 +160,12 @@ class __$$TelemetryDataImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? tagId = null,
-    Object? batteryLevel = null,
-    Object? motionData = null,
-    Object? timestamp = null,
-    Object? ttl = null,
+    Object? cattleId = null,
     Object? temperature = null,
     Object? heartRate = null,
+    Object? motionData = null,
+    Object? batteryLevel = freezed,
+    Object? timestamp = null,
   }) {
     return _then(
       _$TelemetryDataImpl(
@@ -173,26 +174,11 @@ class __$$TelemetryDataImplCopyWithImpl<$Res>
                 ? _value.tagId
                 : tagId // ignore: cast_nullable_to_non_nullable
                     as String,
-        batteryLevel:
-            null == batteryLevel
-                ? _value.batteryLevel
-                : batteryLevel // ignore: cast_nullable_to_non_nullable
-                    as int,
-        motionData:
-            null == motionData
-                ? _value.motionData
-                : motionData // ignore: cast_nullable_to_non_nullable
-                    as double,
-        timestamp:
-            null == timestamp
-                ? _value.timestamp
-                : timestamp // ignore: cast_nullable_to_non_nullable
-                    as int,
-        ttl:
-            null == ttl
-                ? _value.ttl
-                : ttl // ignore: cast_nullable_to_non_nullable
-                    as int,
+        cattleId:
+            null == cattleId
+                ? _value.cattleId
+                : cattleId // ignore: cast_nullable_to_non_nullable
+                    as String,
         temperature:
             null == temperature
                 ? _value.temperature
@@ -202,6 +188,21 @@ class __$$TelemetryDataImplCopyWithImpl<$Res>
             null == heartRate
                 ? _value.heartRate
                 : heartRate // ignore: cast_nullable_to_non_nullable
+                    as int,
+        motionData:
+            null == motionData
+                ? _value.motionData
+                : motionData // ignore: cast_nullable_to_non_nullable
+                    as double,
+        batteryLevel:
+            freezed == batteryLevel
+                ? _value.batteryLevel
+                : batteryLevel // ignore: cast_nullable_to_non_nullable
+                    as int?,
+        timestamp:
+            null == timestamp
+                ? _value.timestamp
+                : timestamp // ignore: cast_nullable_to_non_nullable
                     as int,
       ),
     );
@@ -213,12 +214,12 @@ class __$$TelemetryDataImplCopyWithImpl<$Res>
 class _$TelemetryDataImpl implements _TelemetryData {
   const _$TelemetryDataImpl({
     required this.tagId,
-    required this.batteryLevel,
-    required this.motionData,
-    required this.timestamp,
-    required this.ttl,
+    required this.cattleId,
     required this.temperature,
     @JsonKey(name: 'pulseRate') required this.heartRate,
+    required this.motionData,
+    @JsonKey(defaultValue: 100) this.batteryLevel,
+    required this.timestamp,
   });
 
   factory _$TelemetryDataImpl.fromJson(Map<String, dynamic> json) =>
@@ -227,22 +228,23 @@ class _$TelemetryDataImpl implements _TelemetryData {
   @override
   final String tagId;
   @override
-  final int batteryLevel;
-  @override
-  final double motionData;
-  @override
-  final int timestamp;
-  @override
-  final int ttl;
+  final String cattleId;
   @override
   final double temperature;
   @override
   @JsonKey(name: 'pulseRate')
   final int heartRate;
+  @override
+  final double motionData;
+  @override
+  @JsonKey(defaultValue: 100)
+  final int? batteryLevel;
+  @override
+  final int timestamp;
 
   @override
   String toString() {
-    return 'TelemetryData(tagId: $tagId, batteryLevel: $batteryLevel, motionData: $motionData, timestamp: $timestamp, ttl: $ttl, temperature: $temperature, heartRate: $heartRate)';
+    return 'TelemetryData(tagId: $tagId, cattleId: $cattleId, temperature: $temperature, heartRate: $heartRate, motionData: $motionData, batteryLevel: $batteryLevel, timestamp: $timestamp)';
   }
 
   @override
@@ -251,17 +253,18 @@ class _$TelemetryDataImpl implements _TelemetryData {
         (other.runtimeType == runtimeType &&
             other is _$TelemetryDataImpl &&
             (identical(other.tagId, tagId) || other.tagId == tagId) &&
-            (identical(other.batteryLevel, batteryLevel) ||
-                other.batteryLevel == batteryLevel) &&
-            (identical(other.motionData, motionData) ||
-                other.motionData == motionData) &&
-            (identical(other.timestamp, timestamp) ||
-                other.timestamp == timestamp) &&
-            (identical(other.ttl, ttl) || other.ttl == ttl) &&
+            (identical(other.cattleId, cattleId) ||
+                other.cattleId == cattleId) &&
             (identical(other.temperature, temperature) ||
                 other.temperature == temperature) &&
             (identical(other.heartRate, heartRate) ||
-                other.heartRate == heartRate));
+                other.heartRate == heartRate) &&
+            (identical(other.motionData, motionData) ||
+                other.motionData == motionData) &&
+            (identical(other.batteryLevel, batteryLevel) ||
+                other.batteryLevel == batteryLevel) &&
+            (identical(other.timestamp, timestamp) ||
+                other.timestamp == timestamp));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -269,12 +272,12 @@ class _$TelemetryDataImpl implements _TelemetryData {
   int get hashCode => Object.hash(
     runtimeType,
     tagId,
-    batteryLevel,
-    motionData,
-    timestamp,
-    ttl,
+    cattleId,
     temperature,
     heartRate,
+    motionData,
+    batteryLevel,
+    timestamp,
   );
 
   /// Create a copy of TelemetryData
@@ -294,12 +297,12 @@ class _$TelemetryDataImpl implements _TelemetryData {
 abstract class _TelemetryData implements TelemetryData {
   const factory _TelemetryData({
     required final String tagId,
-    required final int batteryLevel,
-    required final double motionData,
-    required final int timestamp,
-    required final int ttl,
+    required final String cattleId,
     required final double temperature,
     @JsonKey(name: 'pulseRate') required final int heartRate,
+    required final double motionData,
+    @JsonKey(defaultValue: 100) final int? batteryLevel,
+    required final int timestamp,
   }) = _$TelemetryDataImpl;
 
   factory _TelemetryData.fromJson(Map<String, dynamic> json) =
@@ -308,18 +311,19 @@ abstract class _TelemetryData implements TelemetryData {
   @override
   String get tagId;
   @override
-  int get batteryLevel;
-  @override
-  double get motionData;
-  @override
-  int get timestamp;
-  @override
-  int get ttl;
+  String get cattleId;
   @override
   double get temperature;
   @override
   @JsonKey(name: 'pulseRate')
   int get heartRate;
+  @override
+  double get motionData;
+  @override
+  @JsonKey(defaultValue: 100)
+  int? get batteryLevel;
+  @override
+  int get timestamp;
 
   /// Create a copy of TelemetryData
   /// with the given fields replaced by the non-null parameter values.

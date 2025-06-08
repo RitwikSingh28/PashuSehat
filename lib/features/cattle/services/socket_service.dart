@@ -1,13 +1,5 @@
 import 'dart:async';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:cattle_health/features/cattle/models/telemetry_data.dart';
-
-enum SocketConnectionState {
-  disconnected,
-  connecting,
-  connected,
-  error,
-}
 
 class SocketService {
   static final SocketService _instance = SocketService._internal();
@@ -15,19 +7,16 @@ class SocketService {
   SocketService._internal();
 
   IO.Socket? _socket;
-  final _telemetryControllers = <String, StreamController<TelemetryData>>{};
-  final _connectionStateController = StreamController<SocketConnectionState>.broadcast();
-  Timer? _reconnectTimer;
-  bool _isInitialized = false;
+  final _telemetryControllers = <String, StreamController<Map<String, dynamic>>>{};
+  final _pendingSubscriptions = <String, String>{};  // Map of cattleId to userId
 
-  Stream<SocketConnectionState> get connectionState => _connectionStateController.stream;
+  void initialize(String url, String token) {
+    if (_socket != null) return;
 
-  void initialize(String baseUrl, String token) {
-    if (_isInitialized) return;
-    _isInitialized = true;
+    print('Initializing socket with URL: $url');
 
     _socket = IO.io(
-      baseUrl,
+      url,
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .setExtraHeaders({'Authorization': 'Bearer $token'})
@@ -45,108 +34,94 @@ class SocketService {
 
   void _setupSocketListeners() {
     _socket
-      ?..on('connect', (_) {
+      ?..onConnect((_) {
         print('Socket connected');
-        _connectionStateController.add(SocketConnectionState.connected);
-        _reconnectTimer?.cancel();
-        _reconnectTimer = null;
-
-        // Resubscribe to all active cattle
-        for (final cattleId in _telemetryControllers.keys) {
-          _resubscribeToCattle(cattleId);
+        // Resubscribe to pending subscriptions on reconnect
+        for (final entry in _pendingSubscriptions.entries) {
+          print('Resubscribing to cattle: ${entry.key} for user: ${entry.value}');
+          _socket?.emit('subscribe-cattle', {
+            'cattleId': entry.key,
+            'userId': entry.value,
+          });
         }
       })
-      ..on('disconnect', (_) {
+      ..onDisconnect((_) {
         print('Socket disconnected');
-        _connectionStateController.add(SocketConnectionState.disconnected);
-        _startReconnectTimer();
       })
-      ..on('connect_error', (error) {
+      ..onConnectError((error) {
         print('Socket connection error: $error');
-        _connectionStateController.add(SocketConnectionState.error);
-        _startReconnectTimer();
       })
-      ..on('telemetry-update', (data) {
-        try {
-          final telemetry = TelemetryData.fromJson(Map<String, dynamic>.from(data));
-          _telemetryControllers[telemetry.tagId]?.add(telemetry);
-        } catch (e) {
-          print('Error parsing telemetry data: $e');
-        }
+      ..onError((error) {
+        print('Socket error: $error');
       });
   }
 
-  void _startReconnectTimer() {
-    _reconnectTimer?.cancel();
-    _reconnectTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      if (_socket?.connected ?? false) {
-        timer.cancel();
-        return;
-      }
-      _connectionStateController.add(SocketConnectionState.connecting);
-      _socket?.connect();
-    });
-  }
+  Stream<Map<String, dynamic>> subscribeToCattle(String cattleId, String userId) {
+    print('Subscribing to cattle: $cattleId for user: $userId');
 
-  void _resubscribeToCattle(String cattleId) {
-    _socket?.emit('subscribe-cattle', {'cattleId': cattleId});
-  }
-
-  Stream<TelemetryData> subscribeToCattle(String cattleId, String userId) {
-    // Return existing stream if already subscribed
     if (_telemetryControllers.containsKey(cattleId)) {
       return _telemetryControllers[cattleId]!.stream;
     }
 
-    // Create a new stream controller
-    final streamController = StreamController<TelemetryData>.broadcast(
-      onCancel: () {
-        // Only unsubscribe if there are no more listeners
-        if (!_telemetryControllers[cattleId]!.hasListener) {
-          unsubscribeFromCattle(cattleId);
-        }
-      },
-    );
+    final controller = StreamController<Map<String, dynamic>>.broadcast();
+    _telemetryControllers[cattleId] = controller;
 
-    // Store the controller
-    _telemetryControllers[cattleId] = streamController;
+    // Set up the telemetry listener
+    _socket?.on('telemetry-update', (data) {
+      print('DEBUG: Raw telemetry data received: $data');
+      if (data is Map<String, dynamic> && data['cattleId'] == cattleId) {
+        print('Received telemetry data for $cattleId: $data');
+        print('DEBUG: About to add data to controller');
+        controller.add(data);
+        print('DEBUG: Data added to controller');
+      }
+    });
 
-    // Subscribe to updates if connected
+    // Set up the alert listener
+    _socket?.on('alert-notification', (alert) {
+      print('Received alert: $alert');
+      // You can handle alerts separately or add them to a different stream
+    });
+
+    // Always add to pending subscriptions
+    _pendingSubscriptions[cattleId] = userId;
+
+    // Try to subscribe immediately if connected
     if (_socket?.connected ?? false) {
+      print('Socket connected, emitting subscribe event for cattle: $cattleId');
+      print('DEBUG: Socket ID: ${_socket?.id}');
       _socket?.emit('subscribe-cattle', {
         'cattleId': cattleId,
         'userId': userId,
       });
+    } else {
+      print('Socket not connected, will subscribe when connection is established');
+      // Make sure socket is connecting
+      _socket?.connect();
     }
 
-    return streamController.stream;
+    return controller.stream;
   }
 
   void unsubscribeFromCattle(String cattleId) {
-    if (_socket?.connected ?? false) {
-      _socket?.emit('unsubscribe-cattle', {'cattleId': cattleId});
-    }
+    print('Unsubscribing from cattle: $cattleId');
+    _pendingSubscriptions.remove(cattleId);
+    _socket?.emit('unsubscribe-cattle', cattleId);
+    _socket?.off('telemetry-update');
+    _socket?.off('alert-notification');
     _telemetryControllers[cattleId]?.close();
     _telemetryControllers.remove(cattleId);
   }
 
-  void updateToken(String newToken) {
-    _socket?.io.options?['extraHeaders'] = {'Authorization': 'Bearer $newToken'};
-    if (_socket?.connected ?? false) {
-      _socket?.disconnect();
-      _socket?.connect();
-    }
-  }
-
-  bool get isConnected => _socket?.connected ?? false;
-
   void dispose() {
-    _reconnectTimer?.cancel();
+    print('Disposing socket service');
+    _pendingSubscriptions.clear();
     _socket?.disconnect();
     _socket?.dispose();
-    _telemetryControllers.values.forEach((controller) => controller.close());
+    for (final controller in _telemetryControllers.values) {
+      controller.close();
+    }
     _telemetryControllers.clear();
-    _connectionStateController.close();
-    _isInitialized = false;
+    _socket = null;
   }
 }

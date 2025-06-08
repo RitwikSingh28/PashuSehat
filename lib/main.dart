@@ -25,7 +25,7 @@ void main() async {
 
   // Initialize socket service with token
   SocketService().initialize(
-    'ws://3.108.16.86:3000',
+    'ws://52.66.237.145:3000',
     token ?? '',
   );
 
