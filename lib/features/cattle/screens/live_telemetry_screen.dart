@@ -8,6 +8,7 @@ import 'package:cattle_health/features/auth/bloc/auth_bloc.dart';
 import 'package:cattle_health/features/auth/bloc/auth_state.dart';
 import 'package:cattle_health/features/cattle/widgets/metrics_chart.dart';
 import 'package:cattle_health/features/cattle/services/socket_service.dart';
+import 'package:intl/intl.dart';
 
 class LiveTelemetryScreen extends StatefulWidget {
   final String cattleId;
@@ -99,6 +100,39 @@ class _LiveTelemetryScreenState extends State<LiveTelemetryScreen> {
     );
   }
 
+  Widget _buildInfoCard(String title, String value, IconData icon, {Color? iconColor}) {
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Icon(icon, color: iconColor),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    value,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   List<FlSpot> _getTemperatureData(TelemetryData? telemetry) {
     if (telemetry == null) return [];
     return [FlSpot(0, telemetry.temperature)];
@@ -106,7 +140,18 @@ class _LiveTelemetryScreenState extends State<LiveTelemetryScreen> {
 
   List<FlSpot> _getHeartRateData(TelemetryData? telemetry) {
     if (telemetry == null) return [];
-    return [FlSpot(0, telemetry.heartRate)];
+    return [FlSpot(0, telemetry.heartRate.toDouble())];
+  }
+
+  String _formatTimestamp(int timestamp) {
+    final date = DateTime.fromMillisecondsSinceEpoch(timestamp);
+    return DateFormat('MMM dd, yyyy HH:mm:ss').format(date);
+  }
+
+  Color _getBatteryColor(int level) {
+    if (level >= 60) return Colors.green;
+    if (level >= 20) return Colors.orange;
+    return Colors.red;
   }
 
   @override
@@ -182,6 +227,29 @@ class _LiveTelemetryScreenState extends State<LiveTelemetryScreen> {
                       ],
                     ),
                   ),
+                  if (telemetry != null) ...[
+                    _buildInfoCard(
+                      'Tag ID',
+                      telemetry.tagId,
+                      Icons.qr_code,
+                    ),
+                    _buildInfoCard(
+                      'Battery Level',
+                      '${telemetry.batteryLevel}%',
+                      Icons.battery_full,
+                      iconColor: _getBatteryColor(telemetry.batteryLevel),
+                    ),
+                    _buildInfoCard(
+                      'Motion Data',
+                      '${telemetry.motionData.toStringAsFixed(2)} g',
+                      Icons.moving,
+                    ),
+                    _buildInfoCard(
+                      'Last Update',
+                      _formatTimestamp(telemetry.timestamp),
+                      Icons.access_time,
+                    ),
+                  ],
                   if (provider.connectionState == SocketConnectionState.connected) ...[
                     Card(
                       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -249,7 +317,7 @@ class _LiveTelemetryScreenState extends State<LiveTelemetryScreen> {
                                   const Spacer(),
                                   if (telemetry != null)
                                     Text(
-                                      '${telemetry.heartRate.toStringAsFixed(0)} BPM',
+                                      '${telemetry.heartRate} BPM',
                                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                             fontWeight: FontWeight.bold,
                                           ),

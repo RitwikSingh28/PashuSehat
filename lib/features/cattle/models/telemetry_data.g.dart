@@ -9,17 +9,21 @@ part of 'telemetry_data.dart';
 _$TelemetryDataImpl _$$TelemetryDataImplFromJson(Map<String, dynamic> json) =>
     _$TelemetryDataImpl(
       tagId: json['tagId'] as String,
-      cattleId: json['cattleId'] as String,
+      batteryLevel: (json['batteryLevel'] as num).toInt(),
+      motionData: (json['motionData'] as num).toDouble(),
+      timestamp: (json['timestamp'] as num).toInt(),
+      ttl: (json['ttl'] as num).toInt(),
       temperature: (json['temperature'] as num).toDouble(),
-      heartRate: (json['heartRate'] as num).toDouble(),
-      timestamp: DateTime.parse(json['timestamp'] as String),
+      heartRate: (json['pulseRate'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$TelemetryDataImplToJson(_$TelemetryDataImpl instance) =>
     <String, dynamic>{
       'tagId': instance.tagId,
-      'cattleId': instance.cattleId,
+      'batteryLevel': instance.batteryLevel,
+      'motionData': instance.motionData,
+      'timestamp': instance.timestamp,
+      'ttl': instance.ttl,
       'temperature': instance.temperature,
-      'heartRate': instance.heartRate,
-      'timestamp': instance.timestamp.toIso8601String(),
+      'pulseRate': instance.heartRate,
     };

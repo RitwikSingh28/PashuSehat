@@ -23,7 +23,7 @@ void main() async {
 
   // Initialize socket service with token
   SocketService().initialize(
-    'ws://192.168.0.11:3000',
+    'ws://3.108.16.86:3000',
     token ?? '',
   );
 

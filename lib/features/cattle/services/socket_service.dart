@@ -69,7 +69,7 @@ class SocketService {
       ..on('telemetry-update', (data) {
         try {
           final telemetry = TelemetryData.fromJson(Map<String, dynamic>.from(data));
-          _telemetryControllers[telemetry.cattleId]?.add(telemetry);
+          _telemetryControllers[telemetry.tagId]?.add(telemetry);
         } catch (e) {
           print('Error parsing telemetry data: $e');
         }
