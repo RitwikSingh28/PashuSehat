@@ -99,6 +99,8 @@ class _AlertsScreenState extends State<AlertsScreen> with SingleTickerProviderSt
         return 'Pulse';
       case AlertType.motion:
         return 'Motion';
+      case AlertType.battery:
+        return 'Battery';
     }
   }
 
@@ -111,6 +113,8 @@ class _AlertsScreenState extends State<AlertsScreen> with SingleTickerProviderSt
         return Icons.favorite;
       case AlertType.motion:
         return Icons.running_with_errors;
+      case AlertType.battery:
+        return Icons.battery_alert;
     }
   }
 

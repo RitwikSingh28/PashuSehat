@@ -18,6 +18,8 @@ class AlertCard extends StatelessWidget {
         return 'Pulse Rate: ${alert.value.toStringAsFixed(0)} BPM';
       case AlertType.motion:
         return 'Abnormal Motion Detected';
+      case AlertType.battery:
+        return 'Battery Level: ${alert.value.toStringAsFixed(0)}%';
     }
   }
 
@@ -29,6 +31,8 @@ class AlertCard extends StatelessWidget {
         return Icons.favorite;
       case AlertType.motion:
         return Icons.running_with_errors;
+      case AlertType.battery:
+        return Icons.battery_alert;
     }
   }
 
@@ -71,7 +75,7 @@ class AlertCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        alert.cattleName,
+                        alert.cattleName ?? 'Unknown',
                         style: theme.textTheme.titleMedium,
                       ),
                       Text(
